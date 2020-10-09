@@ -1,11 +1,11 @@
-package com.idealista.infrastructure.persistence;
-
-import org.springframework.stereotype.Repository;
+package com.idealista.adrankingchallenge.infrastructure.persistence;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class InMemoryPersistence {
@@ -16,7 +16,8 @@ public class InMemoryPersistence {
     public InMemoryPersistence() {
         ads = new ArrayList<AdVO>();
         ads.add(new AdVO(1, "CHALET", "Este piso es una ganga, compra, compra, COMPRA!!!!!", Collections.<Integer>emptyList(), 300, null, null, null));
-        ads.add(new AdVO(2, "FLAT", "Nuevo ático céntrico recién reformado. No deje pasar la oportunidad y adquiera este ático de lujo", Arrays.asList(4), 300, null, null, null));
+        ads.add(new AdVO(2, "FLAT", "Nuevo ático céntrico recién reformado. No deje pasar la oportunidad y adquiera este ático de lujo", Arrays
+            .asList(4), 300, null, null, null));
         ads.add(new AdVO(3, "CHALET", "", Arrays.asList(2), 300, null, null, null));
         ads.add(new AdVO(4, "FLAT", "Ático céntrico muy luminoso y recién reformado, parece nuevo", Arrays.asList(5), 300, null, null, null));
         ads.add(new AdVO(5, "FLAT", "Pisazo,", Arrays.asList(3, 8), 300, null, null, null));

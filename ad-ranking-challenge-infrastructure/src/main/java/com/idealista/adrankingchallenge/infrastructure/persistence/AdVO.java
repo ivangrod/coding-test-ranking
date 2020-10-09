@@ -1,4 +1,4 @@
-package com.idealista.infrastructure.persistence;
+package com.idealista.adrankingchallenge.infrastructure.persistence;
 
 import java.util.Date;
 import java.util.List;

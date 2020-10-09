@@ -1,4 +1,4 @@
-package com.idealista.infrastructure.persistence;
+package com.idealista.adrankingchallenge.infrastructure.persistence;
 
 public class PictureVO {
 
