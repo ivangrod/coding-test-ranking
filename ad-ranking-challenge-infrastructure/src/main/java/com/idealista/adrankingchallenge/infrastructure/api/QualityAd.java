@@ -1,4 +1,4 @@
-package com.idealista.infrastructure.api;
+package com.idealista.adrankingchallenge.infrastructure.api;
 
 import java.util.Date;
 import java.util.List;
