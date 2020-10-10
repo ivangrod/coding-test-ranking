@@ -6,10 +6,6 @@ import java.util.Objects;
 
 public final class Ad {
 
-  private static final Integer POINTS_WITHOUT_PICTURE = -10;
-  private static final Integer POINTS_WITH_HD_PICTURE = 20;
-  private static final Integer POINTS_WITH_SD_PICTURE = 10;
-
   private final Integer id;
   private final String typology;
   private final String description;
@@ -120,20 +116,12 @@ public final class Ad {
         '}';
   }
 
-  public Ad updateScore() {
+  public Ad updateScore(List<ScoreHandler> scoreHandlers) {
+
     Integer newScore = this.score;
 
-    if (pictures.isEmpty()) {
-      newScore = newScore + POINTS_WITHOUT_PICTURE;
-    } else {
-      int highDefinitionPicturesCount = Math
-          .toIntExact(pictures.stream().filter(Picture::isHighDefinition).count());
-
-      int standardDefinitionPicturesCount = Math
-          .toIntExact(pictures.stream().filter(Picture::isStandardDefinition).count());
-
-      newScore = newScore + (highDefinitionPicturesCount * POINTS_WITH_HD_PICTURE) + (
-          standardDefinitionPicturesCount * POINTS_WITH_SD_PICTURE);
+    for(ScoreHandler scoreHandler: scoreHandlers){
+      newScore += scoreHandler.pointsToAdd(this);
     }
 
     return withScore(newScore);

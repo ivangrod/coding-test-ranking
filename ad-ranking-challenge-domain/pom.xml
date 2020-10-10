@@ -20,7 +20,13 @@
   </properties>
 
   <dependencies>
-    <!-- Only needed to run tests in a version of IntelliJ IDEA that bundles older versions -->
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.11</version>
+    </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>

@@ -41,4 +41,12 @@ public class AdMother {
 
     return new Ad(1, "FLAT", "Beautiful house", aHDPictureAndASDPicture, 0, 0);
   }
+
+  public static Ad adWithDescription() {
+    return new Ad(1, "FLAT", "Beautiful house", Collections.emptyList(), 0, 0);
+  }
+
+  public static Ad adWithoutDescription() {
+    return new Ad(1, "FLAT", "", Collections.emptyList(), 0, 0);
+  }
 }
