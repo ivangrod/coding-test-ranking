@@ -1,7 +1,9 @@
 package com.idealista.adrankingchallenge.infrastructure.persistence;
 
+import com.idealista.adrankingchallenge.domain.ad.Ad;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
 
 public class AdVO {
 
