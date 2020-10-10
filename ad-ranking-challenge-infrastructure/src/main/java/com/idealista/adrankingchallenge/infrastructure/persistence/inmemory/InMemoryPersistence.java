@@ -4,10 +4,13 @@ import com.idealista.adrankingchallenge.domain.ad.AdRepository;
 import com.idealista.adrankingchallenge.domain.ad.search.AdsFound;
 import com.idealista.adrankingchallenge.infrastructure.persistence.AdVO;
 import com.idealista.adrankingchallenge.infrastructure.persistence.PictureVO;
+import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.AdVOToAdMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,7 +19,10 @@ public class InMemoryPersistence implements AdRepository {
   private List<AdVO> ads;
   private List<PictureVO> pictures;
 
-  public InMemoryPersistence() {
+  @Autowired
+  private AdVOToAdMapper adVOToAdMapper;
+
+  public InMemoryPersistence(AdVOToAdMapper adVOToAdMapper) {
     ads = new ArrayList<AdVO>();
     ads.add(new AdVO(1, "CHALET", "Este piso es una ganga, compra, compra, COMPRA!!!!!",
         Collections.<Integer>emptyList(), 300, null, null, null));
@@ -53,7 +59,8 @@ public class InMemoryPersistence implements AdRepository {
   }
 
   @Override
-  public AdsFound findAdPublicOrderByRating() {
-    return AdsFound.createFakeAdFoundCollectionWithTenAds();
+  public AdsFound findAdPublicOrderByScore() {
+    // TODO Make compare -> sorted(Comparator.nullsLast(Comparator.comparing(AdVO::getScore)))
+    return new AdsFound(ads.stream().map(adVOToAdMapper).collect(Collectors.toList()));
   }
 }

@@ -30,7 +30,7 @@ public class RetrievePublicAdsTest {
   private MockMvc mockMvc;
 
   @Test
-  public void should_Retrieve_Public_Ads_Ordered_By_Rating() throws Exception {
+  public void should_Retrieve_Public_Ads_Ordered_By_Score() throws Exception {
 
     // Arrange
 
