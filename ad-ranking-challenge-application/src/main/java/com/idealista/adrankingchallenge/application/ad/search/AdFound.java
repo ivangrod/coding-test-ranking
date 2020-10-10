@@ -1,6 +1,7 @@
 package com.idealista.adrankingchallenge.application.ad.search;
 
 import com.idealista.adrankingchallenge.domain.ad.Ad;
+import com.idealista.adrankingchallenge.domain.ad.Picture;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -10,16 +11,16 @@ public class AdFound {
   private Integer id;
   private String typology;
   private String description;
-  private List<String> pictureUrls;
+  private List<Picture> pictures;
   private Integer houseSize;
   private Integer gardenSize;
 
   public AdFound(Integer id, String typology, String description,
-      List<String> pictureUrls, Integer houseSize, Integer gardenSize) {
+      List<Picture> pictures, Integer houseSize, Integer gardenSize) {
     this.id = id;
     this.typology = typology;
     this.description = description;
-    this.pictureUrls = pictureUrls;
+    this.pictures = pictures;
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
   }
@@ -36,8 +37,8 @@ public class AdFound {
     return description;
   }
 
-  public List<String> getPictureUrls() {
-    return pictureUrls;
+  public List<Picture> getPictures() {
+    return pictures;
   }
 
   public Integer getHouseSize() {
@@ -51,7 +52,7 @@ public class AdFound {
   public static List<AdFound> fromAds(List<Ad> ads) {
     return ads.stream()
         .map(ad -> new AdFound(ad.getId(), ad.getTypology(), ad.getDescription(),
-            ad.getPictureUrls(), ad.getHouseSize(), ad.getGardenSize()))
+            ad.getPictures(), ad.getHouseSize(), ad.getGardenSize()))
         .collect(Collectors.toList());
   }
 
@@ -67,14 +68,14 @@ public class AdFound {
     return Objects.equals(id, adFound.id) &&
         Objects.equals(typology, adFound.typology) &&
         Objects.equals(description, adFound.description) &&
-        Objects.equals(pictureUrls, adFound.pictureUrls) &&
+        Objects.equals(pictures, adFound.pictures) &&
         Objects.equals(houseSize, adFound.houseSize) &&
         Objects.equals(gardenSize, adFound.gardenSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, typology, description, pictureUrls, houseSize, gardenSize);
+    return Objects.hash(id, typology, description, pictures, houseSize, gardenSize);
   }
 
   @Override
@@ -83,7 +84,7 @@ public class AdFound {
         "id=" + id +
         ", typology='" + typology + '\'' +
         ", description='" + description + '\'' +
-        ", pictureUrls=" + pictureUrls +
+        ", pictureUrls=" + pictures +
         ", houseSize=" + houseSize +
         ", gardenSize=" + gardenSize +
         '}';

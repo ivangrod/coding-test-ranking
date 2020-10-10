@@ -1,26 +1,57 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
-import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class Ad {
+public final class Ad {
 
-  private Integer id;
-  private String typology;
-  private String description;
-  private List<String> pictureUrls;
-  private Integer houseSize;
-  private Integer gardenSize;
+  private static final Integer POINTS_WITHOUT_PICTURE = -10;
+  private static final Integer POINTS_WITH_HD_PICTURE = 20;
+  private static final Integer POINTS_WITH_SD_PICTURE = 10;
+
+  private final Integer id;
+  private final String typology;
+  private final String description;
+  private final List<Picture> pictures;
+  private final Integer houseSize;
+  private final Integer gardenSize;
+  private final Integer score;
+  private final Date irrelevantSince;
 
   public Ad(Integer id, String typology, String description,
-      List<String> pictureUrls, Integer houseSize, Integer gardenSize) {
+      List<Picture> pictureUrls, Integer houseSize, Integer gardenSize) {
     this.id = id;
     this.typology = typology;
     this.description = description;
-    this.pictureUrls = pictureUrls;
+    this.pictures = pictureUrls;
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
+    this.score = 0;
+    this.irrelevantSince = null;
+  }
+
+  private Ad(Integer id, String typology, String description,
+      List<Picture> pictures, Integer houseSize, Integer gardenSize, Integer score,
+      Date irrelevantSince) {
+    this.id = id;
+    this.typology = typology;
+    this.description = description;
+    this.pictures = pictures;
+    this.houseSize = houseSize;
+    this.gardenSize = gardenSize;
+    this.score = score;
+    this.irrelevantSince = irrelevantSince;
+  }
+
+  public Ad withScore(Integer score) {
+    return new Ad(this.id, this.typology, this.description, this.pictures, this.houseSize,
+        this.gardenSize, score, this.irrelevantSince);
+  }
+
+  public Ad withDate(Date irrelevantSince) {
+    return new Ad(this.id, this.typology, this.description, this.pictures, this.houseSize,
+        this.gardenSize, this.score, irrelevantSince);
   }
 
   public Integer getId() {
@@ -35,8 +66,8 @@ public class Ad {
     return description;
   }
 
-  public List<String> getPictureUrls() {
-    return pictureUrls;
+  public List<Picture> getPictures() {
+    return pictures;
   }
 
   public Integer getHouseSize() {
@@ -47,8 +78,12 @@ public class Ad {
     return gardenSize;
   }
 
-  public static Ad createAdEmpty() {
-    return new Ad(0, "", "", Collections.emptyList(), 0, 0);
+  public Integer getScore() {
+    return score;
+  }
+
+  public Date getIrrelevantSince() {
+    return irrelevantSince;
   }
 
   @Override
@@ -63,14 +98,14 @@ public class Ad {
     return Objects.equals(id, ad.id) &&
         Objects.equals(typology, ad.typology) &&
         Objects.equals(description, ad.description) &&
-        Objects.equals(pictureUrls, ad.pictureUrls) &&
+        Objects.equals(pictures, ad.pictures) &&
         Objects.equals(houseSize, ad.houseSize) &&
         Objects.equals(gardenSize, ad.gardenSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, typology, description, pictureUrls, houseSize, gardenSize);
+    return Objects.hash(id, typology, description, pictures, houseSize, gardenSize);
   }
 
   @Override
@@ -79,9 +114,28 @@ public class Ad {
         "id=" + id +
         ", typology='" + typology + '\'' +
         ", description='" + description + '\'' +
-        ", pictureUrls=" + pictureUrls +
+        ", pictureUrls=" + pictures +
         ", houseSize=" + houseSize +
         ", gardenSize=" + gardenSize +
         '}';
+  }
+
+  public Ad updateScore() {
+    Integer newScore = this.score;
+
+    if (pictures.isEmpty()) {
+      newScore = newScore + POINTS_WITHOUT_PICTURE;
+    } else {
+      int highDefinitionPicturesCount = Math
+          .toIntExact(pictures.stream().filter(Picture::isHighDefinition).count());
+
+      int standardDefinitionPicturesCount = Math
+          .toIntExact(pictures.stream().filter(Picture::isStandardDefinition).count());
+
+      newScore = newScore + (highDefinitionPicturesCount * POINTS_WITH_HD_PICTURE) + (
+          standardDefinitionPicturesCount * POINTS_WITH_SD_PICTURE);
+    }
+
+    return withScore(newScore);
   }
 }

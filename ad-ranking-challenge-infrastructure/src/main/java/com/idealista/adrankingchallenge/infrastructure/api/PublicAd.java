@@ -1,7 +1,9 @@
 package com.idealista.adrankingchallenge.infrastructure.api;
 
 import com.idealista.adrankingchallenge.application.ad.search.AdFound;
+import com.idealista.adrankingchallenge.domain.ad.Picture;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PublicAd {
 
@@ -24,7 +26,8 @@ public class PublicAd {
 
   public static PublicAd buildPublicAdFromAdFound(AdFound adFound) {
     return new PublicAd(adFound.getId(), adFound.getTypology(), adFound.getDescription(),
-        adFound.getPictureUrls(), adFound.getHouseSize(), adFound.getGardenSize());
+        adFound.getPictures().stream().map(Picture::getUrl).collect(Collectors.toList()),
+        adFound.getHouseSize(), adFound.getGardenSize());
   }
 
   public Integer getId() {
