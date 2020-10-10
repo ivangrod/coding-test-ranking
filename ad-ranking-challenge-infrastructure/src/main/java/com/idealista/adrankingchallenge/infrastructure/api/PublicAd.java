@@ -1,61 +1,77 @@
 package com.idealista.adrankingchallenge.infrastructure.api;
 
+import com.idealista.adrankingchallenge.application.ad.search.AdFound;
 import java.util.List;
 
 public class PublicAd {
 
-    private Integer id;
-    private String typology;
-    private String description;
-    private List<String> pictureUrls;
-    private Integer houseSize;
-    private Integer gardenSize;
+  private Integer id;
+  private String typology;
+  private String description;
+  private List<String> pictureUrls;
+  private Integer houseSize;
+  private Integer gardenSize;
 
-    public Integer getId() {
-        return id;
-    }
+  public PublicAd(Integer id, String typology, String description,
+      List<String> pictureUrls, Integer houseSize, Integer gardenSize) {
+    this.id = id;
+    this.typology = typology;
+    this.description = description;
+    this.pictureUrls = pictureUrls;
+    this.houseSize = houseSize;
+    this.gardenSize = gardenSize;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public static PublicAd buildPublicAdFromAdFound(AdFound adFound) {
+    return new PublicAd(adFound.getId(), adFound.getTypology(), adFound.getDescription(),
+        adFound.getPictureUrls(), adFound.getHouseSize(), adFound.getGardenSize());
+  }
 
-    public String getTypology() {
-        return typology;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public void setTypology(String typology) {
-        this.typology = typology;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getTypology() {
+    return typology;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setTypology(String typology) {
+    this.typology = typology;
+  }
 
-    public List<String> getPictureUrls() {
-        return pictureUrls;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setPictureUrls(List<String> pictureUrls) {
-        this.pictureUrls = pictureUrls;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public Integer getHouseSize() {
-        return houseSize;
-    }
+  public List<String> getPictureUrls() {
+    return pictureUrls;
+  }
 
-    public void setHouseSize(Integer houseSize) {
-        this.houseSize = houseSize;
-    }
+  public void setPictureUrls(List<String> pictureUrls) {
+    this.pictureUrls = pictureUrls;
+  }
 
-    public Integer getGardenSize() {
-        return gardenSize;
-    }
+  public Integer getHouseSize() {
+    return houseSize;
+  }
 
-    public void setGardenSize(Integer gardenSize) {
-        this.gardenSize = gardenSize;
-    }
+  public void setHouseSize(Integer houseSize) {
+    this.houseSize = houseSize;
+  }
+
+  public Integer getGardenSize() {
+    return gardenSize;
+  }
+
+  public void setGardenSize(Integer gardenSize) {
+    this.gardenSize = gardenSize;
+  }
 }
