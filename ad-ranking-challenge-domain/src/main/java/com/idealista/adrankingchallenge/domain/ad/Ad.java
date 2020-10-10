@@ -1,12 +1,10 @@
-package com.idealista.adrankingchallenge.application.ad.search;
+package com.idealista.adrankingchallenge.domain.ad;
 
-import com.idealista.adrankingchallenge.domain.ad.Ad;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-public class AdFound {
+public class Ad {
 
   private Integer id;
   private String typology;
@@ -15,7 +13,7 @@ public class AdFound {
   private Integer houseSize;
   private Integer gardenSize;
 
-  public AdFound(Integer id, String typology, String description,
+  public Ad(Integer id, String typology, String description,
       List<String> pictureUrls, Integer houseSize, Integer gardenSize) {
     this.id = id;
     this.typology = typology;
@@ -49,11 +47,8 @@ public class AdFound {
     return gardenSize;
   }
 
-  public static List<AdFound> fromAds(List<Ad> ads) {
-    return ads.stream()
-        .map(ad -> new AdFound(ad.getId(), ad.getTypology(), ad.getDescription(),
-            ad.getPictureUrls(), ad.getHouseSize(), ad.getGardenSize()))
-        .collect(Collectors.toList());
+  public static Ad createAdEmpty() {
+    return new Ad(0, "", "", Collections.emptyList(), 0, 0);
   }
 
   @Override
@@ -64,13 +59,13 @@ public class AdFound {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AdFound adFound = (AdFound) o;
-    return Objects.equals(id, adFound.id) &&
-        Objects.equals(typology, adFound.typology) &&
-        Objects.equals(description, adFound.description) &&
-        Objects.equals(pictureUrls, adFound.pictureUrls) &&
-        Objects.equals(houseSize, adFound.houseSize) &&
-        Objects.equals(gardenSize, adFound.gardenSize);
+    Ad ad = (Ad) o;
+    return Objects.equals(id, ad.id) &&
+        Objects.equals(typology, ad.typology) &&
+        Objects.equals(description, ad.description) &&
+        Objects.equals(pictureUrls, ad.pictureUrls) &&
+        Objects.equals(houseSize, ad.houseSize) &&
+        Objects.equals(gardenSize, ad.gardenSize);
   }
 
   @Override
@@ -80,7 +75,7 @@ public class AdFound {
 
   @Override
   public String toString() {
-    return "AdFound{" +
+    return "Ad{" +
         "id=" + id +
         ", typology='" + typology + '\'' +
         ", description='" + description + '\'' +
