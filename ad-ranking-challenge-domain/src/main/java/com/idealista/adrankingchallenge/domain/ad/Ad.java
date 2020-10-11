@@ -38,13 +38,13 @@ public final class Ad {
     this.irrelevantSince = null;
   }
 
-  private Ad(Integer id, Typology typology, String description,
-      List<Picture> pictures, Integer houseSize, Integer gardenSize, Integer score,
+  public Ad(Integer id, Typology typology, String description,
+      List<Picture> pictureUrls, Integer houseSize, Integer gardenSize, Integer score,
       Date irrelevantSince) {
     this.id = id;
     this.typology = typology;
     this.description = description;
-    this.pictures = pictures;
+    this.pictures = pictureUrls;
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
     this.score = score;
@@ -102,28 +102,37 @@ public final class Ad {
       return false;
     }
     Ad ad = (Ad) o;
-    return Objects.equals(id, ad.id) &&
-        Objects.equals(typology, ad.typology) &&
+    return Objects.equals(descriptionKeywords, ad.descriptionKeywords) &&
+        Objects.equals(id, ad.id) &&
+        typology == ad.typology &&
         Objects.equals(description, ad.description) &&
         Objects.equals(pictures, ad.pictures) &&
         Objects.equals(houseSize, ad.houseSize) &&
-        Objects.equals(gardenSize, ad.gardenSize);
+        Objects.equals(gardenSize, ad.gardenSize) &&
+        Objects.equals(score, ad.score) &&
+        Objects.equals(irrelevantSince, ad.irrelevantSince);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, typology, description, pictures, houseSize, gardenSize);
+    return Objects
+        .hash(descriptionKeywords, id, typology, description, pictures, houseSize, gardenSize,
+            score,
+            irrelevantSince);
   }
 
   @Override
   public String toString() {
     return "Ad{" +
-        "id=" + id +
-        ", typology='" + typology + '\'' +
+        "descriptionKeywords=" + descriptionKeywords +
+        ", id=" + id +
+        ", typology=" + typology +
         ", description='" + description + '\'' +
-        ", pictureUrls=" + pictures +
+        ", pictures=" + pictures +
         ", houseSize=" + houseSize +
         ", gardenSize=" + gardenSize +
+        ", score=" + score +
+        ", irrelevantSince=" + irrelevantSince +
         '}';
   }
 

@@ -1,6 +1,7 @@
 package com.idealista.adrankingchallenge.application.ad.search;
 
 import com.idealista.adrankingchallenge.domain.ad.AdRepository;
+import java.util.Collections;
 import java.util.List;
 
 public class AdSearcher {
@@ -12,7 +13,8 @@ public class AdSearcher {
   }
 
   public SearchingAdReturn execute() {
-    List<AdFound> adsFound = AdFound.fromAds(adRepository.findAdPublicOrderByScore().getAds());
+    List<AdFound> adsFound = AdFound.fromAds(adRepository.findAllOrderByScore().getAds().orElse(
+        Collections.emptyList()));
     return new SearchingAdReturn(adsFound);
   }
 }

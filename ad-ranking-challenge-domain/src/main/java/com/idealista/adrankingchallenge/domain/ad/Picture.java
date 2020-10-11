@@ -1,5 +1,7 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
+import java.util.Objects;
+
 public final class Picture {
 
   private final Integer id;
@@ -12,8 +14,16 @@ public final class Picture {
     this.definition = definition;
   }
 
+  public Integer getId() {
+    return id;
+  }
+
   public String getUrl() {
     return url;
+  }
+
+  public Definition getDefinition() {
+    return definition;
   }
 
   public boolean isHighDefinition() {
@@ -24,7 +34,35 @@ public final class Picture {
     return definition.equals(Definition.SD);
   }
 
-  enum Definition {
+  public enum Definition {
     HD, SD;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Picture picture = (Picture) o;
+    return Objects.equals(id, picture.id) &&
+        Objects.equals(url, picture.url) &&
+        definition == picture.definition;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, url, definition);
+  }
+
+  @Override
+  public String toString() {
+    return "Picture{" +
+        "id=" + id +
+        ", url='" + url + '\'' +
+        ", definition=" + definition +
+        '}';
   }
 }
