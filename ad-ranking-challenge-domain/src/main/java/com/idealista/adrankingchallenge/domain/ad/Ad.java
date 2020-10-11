@@ -14,6 +14,9 @@ public final class Ad {
   private final static Integer MINIMUN_WORDS_MEDIUM_DESCRIPTION = 20;
   private final static Integer MAXIMUN_WORDS_MEDIUM_DESCRIPTION = 49;
 
+  private static final Integer MAX_SCORE = 100;
+  private static final Integer MIN_SCORE = 0;
+
   private final DescriptionKeywords descriptionKeywords = new DescriptionKeywords(
       new String[]{"Luminoso", "Nuevo", "Céntrico", "Reformado", "Ático"});
 
@@ -47,7 +50,7 @@ public final class Ad {
     this.pictures = pictureUrls;
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
-    this.score = score;
+    this.score = Math.max(MIN_SCORE, Math.min(MAX_SCORE, score));
     this.irrelevantSince = irrelevantSince;
   }
 

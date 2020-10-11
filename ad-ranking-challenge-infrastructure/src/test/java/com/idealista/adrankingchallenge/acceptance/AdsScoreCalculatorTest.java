@@ -46,8 +46,8 @@ public class AdsScoreCalculatorTest {
 
     adsScoreCalculator.execute();
 
-    Ad adWithoutPicturesScoreUpdate = adRepositoryStub.findById(1);
-    Ad adWithPicturesScoreUpdate = adRepositoryStub.findById(2);
+    Ad adWithoutPicturesScoreUpdate = adRepositoryStub.findById(adWithoutPictures.getId());
+    Ad adWithPicturesScoreUpdate = adRepositoryStub.findById(adWithSDAndHDPicture.getId());
 
     // When
     AdsFound adsFound = adRepositoryStub.findAllOrderByScore();
