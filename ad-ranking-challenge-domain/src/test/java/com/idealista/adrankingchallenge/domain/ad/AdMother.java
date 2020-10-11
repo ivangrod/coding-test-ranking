@@ -80,6 +80,36 @@ public class AdMother {
         0, 0);
   }
 
+  public static Ad adFlatComplete() {
+    return new Ad(1, Typology.FLAT, createDescriptionWithWords(10), Collections
+        .singletonList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.HD)),
+        85, 0);
+  }
+
+  public static Ad adChaletComplete() {
+    return new Ad(1, Typology.CHALET, createDescriptionWithWords(10), Collections
+        .singletonList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.HD)),
+        85, 120);
+  }
+
+  public static Ad adGarageWithDescriptionComplete() {
+    return new Ad(1, Typology.GARAGE, createDescriptionWithWords(10), Collections
+        .singletonList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.HD)),
+        0, 0);
+  }
+
+  public static Ad adGarageWithoutDescriptionComplete() {
+    return new Ad(1, Typology.GARAGE, StringUtils.EMPTY, Collections
+        .singletonList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.SD)),
+        0, 0);
+  }
+
+  public static Ad adFlatWithHDPictureAndFiftyWordsInTheDescription() {
+    List<Picture> aHDPicture = Arrays
+        .asList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.HD));
+    return new Ad(1, Typology.FLAT, createDescriptionWithWords(50), aHDPicture, 0, 0);
+  }
+
   private static String createDescriptionWithWords(int numberOfWords) {
     StringBuilder strBuilder = new StringBuilder();
     for (int times = 0; times < numberOfWords; times++) {

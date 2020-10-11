@@ -15,7 +15,7 @@ public class PictureScore implements ScoreHandler {
 
     int points = 0;
 
-    if (ad.getPictures().isEmpty()) {
+    if (!ad.hasPhoto()) {
       points = points + POINTS_WITHOUT_PICTURE;
     } else {
       int highDefinitionPicturesCount = Math

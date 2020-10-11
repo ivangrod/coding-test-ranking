@@ -16,7 +16,7 @@ public class DescriptionScore implements ScoreHandler {
   public Integer pointsToAdd(Ad ad) {
 
     int points = 0;
-    if (StringUtils.isBlank(ad.getDescription())) {
+    if (!ad.hasDescription()) {
       return points;
     }
 

@@ -147,8 +147,12 @@ public final class Ad {
     return this.typology.equals(Typology.CHALET) && hasLongDescription();
   }
 
+  public boolean hasDescription() {
+    return StringUtils.isNotBlank(this.description);
+  }
+
   private boolean hasMediumDescription() {
-    if (StringUtils.isBlank(this.description)) {
+    if (!hasDescription()) {
       return false;
     }
     int words = new StringTokenizer(this.description).countTokens();
@@ -156,15 +160,41 @@ public final class Ad {
   }
 
   private boolean hasLongDescription() {
-    if (StringUtils.isBlank(this.description)) {
+    if (!hasDescription()) {
       return false;
     }
     int words = new StringTokenizer(this.description).countTokens();
     return words > MAXIMUN_WORDS_MEDIUM_DESCRIPTION;
   }
 
+  public boolean hasPhoto() {
+    return !this.pictures.isEmpty();
+  }
+
+  public boolean hasHouseSize() {
+    return !this.houseSize.equals(0);
+  }
+
+  public boolean hasGardenSize() {
+    return !this.gardenSize.equals(0);
+  }
+
+  public boolean isComplete() {
+
+    boolean isComplete = false;
+    switch (this.typology) {
+      case FLAT:
+        isComplete = hasDescription() && hasPhoto() && hasHouseSize();
+      case CHALET:
+        isComplete = hasDescription() && hasPhoto() && hasHouseSize() && hasGardenSize();
+      case GARAGE:
+        isComplete = hasPhoto();
+    }
+    return isComplete;
+  }
+
   public Integer numberOfOccurrencesWithKeywordsInTheDescription() {
-    if (StringUtils.isBlank(this.description)) {
+    if (!hasDescription()) {
       return 0;
     }
     return Math.toIntExact(Arrays.stream(this.description.split(StringUtils.SPACE))
