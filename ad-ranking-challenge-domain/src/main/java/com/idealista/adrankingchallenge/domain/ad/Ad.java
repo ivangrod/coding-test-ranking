@@ -3,11 +3,16 @@ package com.idealista.adrankingchallenge.domain.ad;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringTokenizer;
+import org.apache.commons.lang3.StringUtils;
 
 public final class Ad {
 
+  private final static Integer MINIMUN_WORDS_MEDIUM_DESCRIPTION = 20;
+  private final static Integer MAXIMUN_WORDS_MEDIUM_DESCRIPTION = 49;
+
   private final Integer id;
-  private final String typology;
+  private final Typology typology;
   private final String description;
   private final List<Picture> pictures;
   private final Integer houseSize;
@@ -15,7 +20,7 @@ public final class Ad {
   private final Integer score;
   private final Date irrelevantSince;
 
-  public Ad(Integer id, String typology, String description,
+  public Ad(Integer id, Typology typology, String description,
       List<Picture> pictureUrls, Integer houseSize, Integer gardenSize) {
     this.id = id;
     this.typology = typology;
@@ -27,7 +32,7 @@ public final class Ad {
     this.irrelevantSince = null;
   }
 
-  private Ad(Integer id, String typology, String description,
+  private Ad(Integer id, Typology typology, String description,
       List<Picture> pictures, Integer houseSize, Integer gardenSize, Integer score,
       Date irrelevantSince) {
     this.id = id;
@@ -54,7 +59,7 @@ public final class Ad {
     return id;
   }
 
-  public String getTypology() {
+  public Typology getTypology() {
     return typology;
   }
 
@@ -117,13 +122,22 @@ public final class Ad {
   }
 
   public Ad updateScore(List<ScoreHandler> scoreHandlers) {
-
     Integer newScore = this.score;
-
-    for(ScoreHandler scoreHandler: scoreHandlers){
+    for (ScoreHandler scoreHandler : scoreHandlers) {
       newScore += scoreHandler.pointsToAdd(this);
     }
-
     return withScore(newScore);
+  }
+
+  public boolean isAFlatWithMediumDescription() {
+    return this.typology.equals(Typology.FLAT) && hasMediumDescription();
+  }
+
+  public boolean hasMediumDescription() {
+    if (StringUtils.isBlank(this.description)) {
+      return false;
+    }
+    int words = new StringTokenizer(this.description).countTokens();
+    return words >= MINIMUN_WORDS_MEDIUM_DESCRIPTION && words <= MAXIMUN_WORDS_MEDIUM_DESCRIPTION;
   }
 }

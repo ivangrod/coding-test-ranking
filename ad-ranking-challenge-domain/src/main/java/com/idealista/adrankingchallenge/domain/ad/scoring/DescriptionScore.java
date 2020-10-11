@@ -7,14 +7,21 @@ import org.apache.commons.lang3.StringUtils;
 public class DescriptionScore implements ScoreHandler {
 
   private static final Integer POINTS_WITH_DESCRIPTION = 5;
+  private static final Integer POINTS_FLAT_WITH_MEDIUM_DESCRIPTION = 10;
+  private static final Integer POINTS_FLAT_WITH_LONG_DESCRIPTION = 30;
 
   @Override
   public Integer pointsToAdd(Ad ad) {
 
     int points = 0;
+    if (StringUtils.isBlank(ad.getDescription())) {
+      return points;
+    }
 
-    if (StringUtils.isNotBlank(ad.getDescription())) {
-      points = points + POINTS_WITH_DESCRIPTION;
+    points = points + POINTS_WITH_DESCRIPTION;
+
+    if (ad.isAFlatWithMediumDescription()) {
+      points = points + POINTS_FLAT_WITH_MEDIUM_DESCRIPTION;
     }
 
     return points;
