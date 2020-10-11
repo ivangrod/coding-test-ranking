@@ -50,7 +50,7 @@ public final class Ad {
     this.pictures = pictureUrls;
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
-    this.score = Math.max(MIN_SCORE, Math.min(MAX_SCORE, score));
+    this.score = (score != null) ? Math.max(MIN_SCORE, Math.min(MAX_SCORE, score)) : 0;
     this.irrelevantSince = irrelevantSince;
   }
 

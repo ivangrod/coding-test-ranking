@@ -3,33 +3,40 @@ package com.idealista.adrankingchallenge.application.ad.search;
 import com.idealista.adrankingchallenge.domain.ad.Ad;
 import com.idealista.adrankingchallenge.domain.ad.Picture;
 import com.idealista.adrankingchallenge.domain.ad.Typology;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AdFound {
 
-  private Integer id;
-  private Typology typology;
-  private String description;
-  private List<Picture> pictures;
-  private Integer houseSize;
-  private Integer gardenSize;
+  private final Integer id;
+  private final Typology typology;
+  private final String description;
+  private final List<Picture> pictures;
+  private final Integer houseSize;
+  private final Integer gardenSize;
+  private final Integer score;
+  private final Date irrelevantSince;
 
   public AdFound(Integer id, Typology typology, String description,
-      List<Picture> pictures, Integer houseSize, Integer gardenSize) {
+      List<Picture> pictures, Integer houseSize, Integer gardenSize, Integer score,
+      Date irrelevantSince) {
     this.id = id;
     this.typology = typology;
     this.description = description;
     this.pictures = pictures;
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
+    this.score = score;
+    this.irrelevantSince = irrelevantSince;
   }
 
   public static List<AdFound> fromAds(List<Ad> ads) {
     return ads.stream()
               .map(ad -> new AdFound(ad.getId(), ad.getTypology(), ad.getDescription(),
-                                     ad.getPictures(), ad.getHouseSize(), ad.getGardenSize()))
+                                     ad.getPictures(), ad.getHouseSize(), ad.getGardenSize(),
+                                     ad.getScore(), ad.getIrrelevantSince()))
               .collect(Collectors.toList());
   }
 
@@ -57,6 +64,14 @@ public class AdFound {
     return gardenSize;
   }
 
+  public Integer getScore() {
+    return score;
+  }
+
+  public Date getIrrelevantSince() {
+    return irrelevantSince;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -67,27 +82,32 @@ public class AdFound {
     }
     AdFound adFound = (AdFound) o;
     return Objects.equals(id, adFound.id) &&
-        Objects.equals(typology, adFound.typology) &&
+        typology == adFound.typology &&
         Objects.equals(description, adFound.description) &&
         Objects.equals(pictures, adFound.pictures) &&
         Objects.equals(houseSize, adFound.houseSize) &&
-        Objects.equals(gardenSize, adFound.gardenSize);
+        Objects.equals(gardenSize, adFound.gardenSize) &&
+        Objects.equals(score, adFound.score) &&
+        Objects.equals(irrelevantSince, adFound.irrelevantSince);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, typology, description, pictures, houseSize, gardenSize);
+    return Objects.hash(id, typology, description, pictures, houseSize, gardenSize, score,
+                        irrelevantSince);
   }
 
   @Override
   public String toString() {
     return "AdFound{" +
         "id=" + id +
-        ", typology='" + typology + '\'' +
+        ", typology=" + typology +
         ", description='" + description + '\'' +
-        ", pictureUrls=" + pictures +
+        ", pictures=" + pictures +
         ", houseSize=" + houseSize +
         ", gardenSize=" + gardenSize +
+        ", score=" + score +
+        ", irrelevantSince=" + irrelevantSince +
         '}';
   }
 }

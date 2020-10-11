@@ -17,11 +17,14 @@ public class AdsController {
   @Autowired
   private AdSearcher adSearcher;
 
-  //TODO añade url del endpoint
+  @GetMapping(path = "/ads/quality", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<QualityAd>> qualityListing() {
-    //TODO rellena el cuerpo del método
-    return ResponseEntity.notFound()
-                         .build();
+    SearchingAdReturn adsQualityResult = adSearcher.execute();
+    return ResponseEntity
+        .ok(adsQualityResult.getAds()
+                           .stream()
+                           .map(QualityAd::buildQualityAdFromAdFound)
+                           .collect(Collectors.toList()));
   }
 
   @GetMapping(path = "/ads/public", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,13 +34,11 @@ public class AdsController {
         .ok(adsPublicResult.getAds()
                            .stream()
                            .map(PublicAd::buildPublicAdFromAdFound)
-                           .collect(
-                               Collectors.toList()));
+                           .collect(Collectors.toList()));
   }
 
   @PatchMapping(path = "/ads/calculateScore")
   public ResponseEntity<Void> calculateScore() {
-    return ResponseEntity.noContent()
-                         .build();
+    return ResponseEntity.noContent().build();
   }
 }
