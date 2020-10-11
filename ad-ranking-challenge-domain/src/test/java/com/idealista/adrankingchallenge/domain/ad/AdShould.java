@@ -46,7 +46,7 @@ public class AdShould {
     Assertions.assertThat(adWithoutPicturesWithScoreUpdated)
               .isNotNull()
               .extracting(Ad::getScore)
-              .isEqualTo(Math.addExact(adWithoutPictures.getScore(), POINTS_WITHOUT_PICTURE));
+              .isEqualTo(MIN_SCORE);
   }
 
   @Test
