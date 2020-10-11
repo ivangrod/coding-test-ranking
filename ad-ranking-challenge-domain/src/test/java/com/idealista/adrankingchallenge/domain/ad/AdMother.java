@@ -4,6 +4,7 @@ import com.idealista.adrankingchallenge.domain.ad.Picture.Definition;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -69,6 +70,13 @@ public class AdMother {
 
   public static Ad adChaletWithFiftyWordsInTheDescription() {
     return new Ad(1, Typology.CHALET, createDescriptionWithWords(50), Collections.emptyList(),
+        0, 0);
+  }
+
+  public static Ad adGarageWithDescriptionContainingTheWords(List<String> keywordInDescription) {
+    return new Ad(1, Typology.GARAGE,
+        createDescriptionWithWords(20).concat(keywordInDescription.stream().collect(
+            Collectors.joining(" "))), Collections.emptyList(),
         0, 0);
   }
 

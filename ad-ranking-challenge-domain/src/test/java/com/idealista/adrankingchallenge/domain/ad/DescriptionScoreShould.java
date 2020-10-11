@@ -1,6 +1,8 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
 import com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore;
+import java.util.Arrays;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +12,7 @@ public class DescriptionScoreShould {
   private static final Integer POINTS_FLAT_WITH_MEDIUM_DESCRIPTION = 10;
   private static final Integer POINTS_FLAT_WITH_LONG_DESCRIPTION = 30;
   private static final Integer POINTS_CHALET_WITH_LONG_DESCRIPTION = 20;
+  private static final Integer POINTS_WITH_KEYWORD_DESCRIPTION = 5;
 
   @Test
   public void return_Zero_Points_Given_An_Ad_Without_Description() {
@@ -90,5 +93,75 @@ public class DescriptionScoreShould {
     //Assert
     Assertions.assertThat(twentyFivePoints)
         .isEqualTo(POINTS_WITH_DESCRIPTION + POINTS_CHALET_WITH_LONG_DESCRIPTION);
+  }
+
+  @Test
+  public void return_Ten_Points_Given_An_Ad_With_A_Keyword_In_Its_Description() {
+
+    //Arrange
+    List<String> keywordInDescription = Arrays.asList("Luminoso");
+    Ad luminousAd = AdMother.adGarageWithDescriptionContainingTheWords(keywordInDescription);
+
+    //Act
+    int tenPoints = new DescriptionScore().pointsToAdd(luminousAd);
+
+    //Assert
+    Assertions.assertThat(tenPoints)
+        .isEqualTo(POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
+            .size()));
+  }
+
+  @Test
+  public void return_Twenty_Points_Given_An_Ad_With_Three_Keywords_In_Its_Description() {
+
+    //Arrange
+    List<String> keywordInDescription = Arrays.asList("Luminoso", "Céntrico", "Reformado");
+    Ad luminousCentricRenovatedAd = AdMother
+        .adGarageWithDescriptionContainingTheWords(keywordInDescription);
+
+    //Act
+    int twentyPoints = new DescriptionScore().pointsToAdd(luminousCentricRenovatedAd);
+
+    //Assert
+    Assertions.assertThat(twentyPoints)
+        .isEqualTo(POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
+            .size()));
+  }
+
+  @Test
+  public void return_Thirty_Points_Given_An_Ad_With_All_Keywords_In_Its_Description() {
+
+    //Arrange
+    List<String> keywordInDescription = Arrays
+        .asList("Luminoso", "Nuevo", "Céntrico", "Reformado", "Ático");
+    Ad luminousNewCentricRenovatedAtticAd = AdMother
+        .adGarageWithDescriptionContainingTheWords(keywordInDescription);
+
+    //Act
+    int thirtyPoints = new DescriptionScore().pointsToAdd(luminousNewCentricRenovatedAtticAd);
+
+    //Assert
+    Assertions.assertThat(thirtyPoints)
+        .isEqualTo(POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
+            .size()));
+  }
+
+  @Test
+  public void return_TwentyFive_Points_Given_An_Ad_With_Four_Misspelled_Keywords_In_Its_Description() {
+
+    //Arrange
+    List<String> misspelledKeywordInDescription = Arrays
+        .asList("luminÓso", "nueVo", "Ceńtrico", "atIco");
+    Ad luminousNewCentricAtticAd = AdMother
+        .adGarageWithDescriptionContainingTheWords(misspelledKeywordInDescription);
+
+    //Act
+    int twentyFivePoints = new DescriptionScore().pointsToAdd(luminousNewCentricAtticAd);
+
+    //Assert
+    Assertions.assertThat(twentyFivePoints)
+        .isEqualTo(POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION
+            * misspelledKeywordInDescription
+            .size()));
   }
 }
