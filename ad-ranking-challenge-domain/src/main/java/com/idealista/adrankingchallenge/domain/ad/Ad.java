@@ -133,11 +133,27 @@ public final class Ad {
     return this.typology.equals(Typology.FLAT) && hasMediumDescription();
   }
 
+  public boolean isAFlatWithLongDescription() {
+    return this.typology.equals(Typology.FLAT) && hasLongDescription();
+  }
+
+  public boolean isAChaletWithLongDescription() {
+    return this.typology.equals(Typology.CHALET) && hasLongDescription();
+  }
+
   public boolean hasMediumDescription() {
     if (StringUtils.isBlank(this.description)) {
       return false;
     }
     int words = new StringTokenizer(this.description).countTokens();
     return words >= MINIMUN_WORDS_MEDIUM_DESCRIPTION && words <= MAXIMUN_WORDS_MEDIUM_DESCRIPTION;
+  }
+
+  private boolean hasLongDescription() {
+    if (StringUtils.isBlank(this.description)) {
+      return false;
+    }
+    int words = new StringTokenizer(this.description).countTokens();
+    return words > MAXIMUN_WORDS_MEDIUM_DESCRIPTION;
   }
 }

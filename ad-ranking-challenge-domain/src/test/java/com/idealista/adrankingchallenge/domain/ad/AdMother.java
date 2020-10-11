@@ -53,8 +53,22 @@ public class AdMother {
   }
 
   public static Ad adFlatWithThirtyWordsInTheDescription() {
-
     return new Ad(1, Typology.FLAT, createDescriptionWithWords(30), Collections.emptyList(),
+        0, 0);
+  }
+
+  public static Ad adFlatWithNineteenWordsInTheDescription() {
+    return new Ad(1, Typology.FLAT, createDescriptionWithWords(19), Collections.emptyList(),
+        0, 0);
+  }
+
+  public static Ad adFlatWithFiftyWordsInTheDescription() {
+    return new Ad(1, Typology.FLAT, createDescriptionWithWords(50), Collections.emptyList(),
+        0, 0);
+  }
+
+  public static Ad adChaletWithFiftyWordsInTheDescription() {
+    return new Ad(1, Typology.CHALET, createDescriptionWithWords(50), Collections.emptyList(),
         0, 0);
   }
 
