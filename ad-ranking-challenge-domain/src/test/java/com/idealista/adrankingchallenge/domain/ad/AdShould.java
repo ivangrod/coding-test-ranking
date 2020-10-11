@@ -1,5 +1,6 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
+import com.idealista.adrankingchallenge.domain.ad.scoring.AdCompleteScore;
 import com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore;
 import com.idealista.adrankingchallenge.domain.ad.scoring.PictureScore;
 import java.util.Arrays;
@@ -13,12 +14,14 @@ public class AdShould {
   private static final Integer POINTS_WITH_A_SD_PICTURE = 10;
   private static final Integer POINTS_WITH_DESCRIPTION = 5;
   private static final Integer POINTS_FLAT_WITH_LONG_DESCRIPTION = 30;
+  private static final Integer MAX_SCORE = 100;
+  private static final Integer MIN_SCORE = 0;
 
   @Test
   public void return_Zero_Value_When_Score_Has_Not_Been_Updated() {
 
     //Arrange
-    Ad ad = AdMother.adInitial();
+    Ad ad = AdMother.adEmpty();
 
     //Act
 
@@ -110,5 +113,39 @@ public class AdShould {
               .isEqualTo(Math.addExact(adFlatHDWithLongDescription.getScore(),
                                        POINTS_WITH_A_HD_PICTURE + POINTS_WITH_DESCRIPTION
                                            + POINTS_FLAT_WITH_LONG_DESCRIPTION));
+  }
+
+  @Test
+  public void return_Maximun_Score_Points_Given_A_Chalet_Ad_Complete_With_Three_HD_Pictures_When_Score_Has_Been_Updated() {
+    //Arrange
+    Ad adChaletCompleteWithThreeHDPictures = AdMother.adChaletCompleteWithThreeHDPictures();
+
+    //Act
+    Ad adChaletWithScoreExceed = adChaletCompleteWithThreeHDPictures
+        .updateScore(
+            Arrays.asList(new PictureScore(), new DescriptionScore(), new AdCompleteScore()));
+
+    //Assert
+    Assertions.assertThat(adChaletWithScoreExceed)
+              .isNotNull()
+              .extracting(Ad::getScore)
+              .isEqualTo(MAX_SCORE);
+  }
+
+  @Test
+  public void return_Minimun_Score_Points_Given_A_Garage_Empty_When_Score_Has_Been_Updated() {
+    //Arrange
+    Ad adWithoutInformation = AdMother.adEmpty();
+
+    //Act
+    Ad adFlatWithLowestScore = adWithoutInformation
+        .updateScore(
+            Arrays.asList(new PictureScore(), new DescriptionScore(), new AdCompleteScore()));
+
+    //Assert
+    Assertions.assertThat(adFlatWithLowestScore)
+              .isNotNull()
+              .extracting(Ad::getScore)
+              .isEqualTo(MIN_SCORE);
   }
 }

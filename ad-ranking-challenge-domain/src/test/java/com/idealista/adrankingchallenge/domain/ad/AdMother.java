@@ -10,8 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public class AdMother {
 
-  public static Ad adInitial() {
-    return new Ad(1, Typology.FLAT, "Beautiful house", Collections.emptyList(), 0, 0);
+  public static Ad adEmpty() {
+    return new Ad(1, Typology.FLAT, StringUtils.EMPTY, Collections.emptyList(), 0, 0);
   }
 
   public static Ad adWithoutPictures() {
@@ -75,10 +75,9 @@ public class AdMother {
 
   public static Ad adGarageWithDescriptionContainingTheWords(List<String> keywordInDescription) {
     return new Ad(1, Typology.GARAGE,
-                  createDescriptionWithWords(20).concat(keywordInDescription.stream()
-                                                                            .collect(
-                                                                                Collectors.joining(
-                                                                                    " "))),
+                  createDescriptionWithWords(20)
+                      .concat(keywordInDescription.stream()
+                                                  .collect(Collectors.joining(" "))),
                   Collections.emptyList(),
                   0, 0);
   }
@@ -93,6 +92,16 @@ public class AdMother {
     return new Ad(1, Typology.CHALET, createDescriptionWithWords(10), Collections
         .singletonList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.HD)),
                   85, 120);
+  }
+
+  public static Ad adChaletCompleteWithThreeHDPictures() {
+
+    List<Picture> threeHDPictures = Arrays
+        .asList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.HD),
+                new Picture(2, "http://www.idealista.com/pictures/2", Definition.HD),
+                new Picture(3, "http://www.idealista.com/pictures/3", Definition.HD));
+    return new Ad(1, Typology.CHALET, createDescriptionWithWords(50),
+                  threeHDPictures,85, 120);
   }
 
   public static Ad adGarageWithDescriptionComplete() {
