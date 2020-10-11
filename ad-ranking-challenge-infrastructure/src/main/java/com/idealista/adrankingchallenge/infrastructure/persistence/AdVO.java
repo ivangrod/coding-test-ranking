@@ -3,6 +3,7 @@ package com.idealista.adrankingchallenge.infrastructure.persistence;
 import com.idealista.adrankingchallenge.domain.ad.Ad;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class AdVO {
@@ -91,5 +92,31 @@ public class AdVO {
 
     public void setIrrelevantSince(Date irrelevantSince) {
         this.irrelevantSince = irrelevantSince;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AdVO adVO = (AdVO) o;
+        return Objects.equals(id, adVO.id) &&
+            Objects.equals(typology, adVO.typology) &&
+            Objects.equals(description, adVO.description) &&
+            Objects.equals(pictures, adVO.pictures) &&
+            Objects.equals(houseSize, adVO.houseSize) &&
+            Objects.equals(gardenSize, adVO.gardenSize) &&
+            Objects.equals(score, adVO.score) &&
+            Objects.equals(irrelevantSince, adVO.irrelevantSince);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects
+            .hash(id, typology, description, pictures, houseSize, gardenSize, score,
+                irrelevantSince);
     }
 }
