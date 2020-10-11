@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+  <artifactId>ad-ranking-challenge-application</artifactId>
+
+  <dependencies>
+    <dependency>
+      <artifactId>ad-ranking-challenge-domain</artifactId>
+      <groupId>${project.parent.groupId}</groupId>
+      <version>${project.parent.version}</version>
+    </dependency>
+  </dependencies>
+
   <modelVersion>4.0.0</modelVersion>
+  <name>${project.groupId}:${project.artifactId}</name>
+  <packaging>jar</packaging>
 
   <parent>
     <artifactId>ad-ranking-challenge</artifactId>
@@ -11,20 +23,8 @@
     <version>1.0</version>
   </parent>
 
-  <artifactId>ad-ranking-challenge-application</artifactId>
-  <name>${project.groupId}:${project.artifactId}</name>
-  <packaging>jar</packaging>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>${project.parent.groupId}</groupId>
-      <artifactId>ad-ranking-challenge-domain</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
-  </dependencies>
 
 </project>

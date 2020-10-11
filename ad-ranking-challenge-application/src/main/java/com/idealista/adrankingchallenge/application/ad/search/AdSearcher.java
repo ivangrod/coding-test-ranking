@@ -13,8 +13,9 @@ public class AdSearcher {
   }
 
   public SearchingAdReturn execute() {
-    List<AdFound> adsFound = AdFound.fromAds(adRepository.findAllOrderByScore().getAds().orElse(
-        Collections.emptyList()));
+    List<AdFound> adsFound = AdFound.fromAds(adRepository.findAllOrderByScore()
+                                                         .getAds()
+                                                         .orElse(Collections.emptyList()));
     return new SearchingAdReturn(adsFound);
   }
 }

@@ -20,19 +20,24 @@ public class AdsController {
   //TODO añade url del endpoint
   public ResponseEntity<List<QualityAd>> qualityListing() {
     //TODO rellena el cuerpo del método
-    return ResponseEntity.notFound().build();
+    return ResponseEntity.notFound()
+                         .build();
   }
 
   @GetMapping(path = "/ads/public", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<PublicAd>> publicListing() {
     SearchingAdReturn adsPublicResult = adSearcher.execute();
     return ResponseEntity
-        .ok(adsPublicResult.getAds().stream().map(PublicAd::buildPublicAdFromAdFound).collect(
-            Collectors.toList()));
+        .ok(adsPublicResult.getAds()
+                           .stream()
+                           .map(PublicAd::buildPublicAdFromAdFound)
+                           .collect(
+                               Collectors.toList()));
   }
 
   @PatchMapping(path = "/ads/calculateScore")
   public ResponseEntity<Void> calculateScore() {
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.noContent()
+                         .build();
   }
 }

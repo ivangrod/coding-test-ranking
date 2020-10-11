@@ -26,6 +26,13 @@ public class AdFound {
     this.gardenSize = gardenSize;
   }
 
+  public static List<AdFound> fromAds(List<Ad> ads) {
+    return ads.stream()
+              .map(ad -> new AdFound(ad.getId(), ad.getTypology(), ad.getDescription(),
+                                     ad.getPictures(), ad.getHouseSize(), ad.getGardenSize()))
+              .collect(Collectors.toList());
+  }
+
   public Integer getId() {
     return id;
   }
@@ -48,13 +55,6 @@ public class AdFound {
 
   public Integer getGardenSize() {
     return gardenSize;
-  }
-
-  public static List<AdFound> fromAds(List<Ad> ads) {
-    return ads.stream()
-        .map(ad -> new AdFound(ad.getId(), ad.getTypology(), ad.getDescription(),
-            ad.getPictures(), ad.getHouseSize(), ad.getGardenSize()))
-        .collect(Collectors.toList());
   }
 
   @Override

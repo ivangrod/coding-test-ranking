@@ -18,7 +18,8 @@ public class AdCompleteScoreShould {
     int fortyPoints = new AdCompleteScore().pointsToAdd(adFlatComplete);
 
     //Assert
-    Assertions.assertThat(fortyPoints).isEqualTo(POINTS_COMPLETE_AD);
+    Assertions.assertThat(fortyPoints)
+              .isEqualTo(POINTS_COMPLETE_AD);
   }
 
   @Test
@@ -31,7 +32,8 @@ public class AdCompleteScoreShould {
     int fortyPoints = new AdCompleteScore().pointsToAdd(adChaletComplete);
 
     //Assert
-    Assertions.assertThat(fortyPoints).isEqualTo(POINTS_COMPLETE_AD);
+    Assertions.assertThat(fortyPoints)
+              .isEqualTo(POINTS_COMPLETE_AD);
   }
 
   @Test
@@ -44,7 +46,8 @@ public class AdCompleteScoreShould {
     int fortyPoints = new AdCompleteScore().pointsToAdd(adGarageWithDescriptionComplete);
 
     //Assert
-    Assertions.assertThat(fortyPoints).isEqualTo(POINTS_COMPLETE_AD);
+    Assertions.assertThat(fortyPoints)
+              .isEqualTo(POINTS_COMPLETE_AD);
   }
 
   @Test
@@ -57,6 +60,7 @@ public class AdCompleteScoreShould {
     int fortyPoints = new AdCompleteScore().pointsToAdd(adGarageWithoutDescriptionComplete);
 
     //Assert
-    Assertions.assertThat(fortyPoints).isEqualTo(POINTS_COMPLETE_AD);
+    Assertions.assertThat(fortyPoints)
+              .isEqualTo(POINTS_COMPLETE_AD);
   }
 }

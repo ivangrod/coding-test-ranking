@@ -23,7 +23,10 @@ public class AdShould {
     //Act
 
     //Assert
-    Assertions.assertThat(ad).isNotNull().extracting(Ad::getScore).isEqualTo(0);
+    Assertions.assertThat(ad)
+              .isNotNull()
+              .extracting(Ad::getScore)
+              .isEqualTo(0);
   }
 
   @Test
@@ -37,9 +40,10 @@ public class AdShould {
         .updateScore(Arrays.asList(new PictureScore()));
 
     //Assert
-    Assertions.assertThat(adWithoutPicturesWithScoreUpdated).isNotNull()
-        .extracting(Ad::getScore)
-        .isEqualTo(Math.addExact(adWithoutPictures.getScore(), POINTS_WITHOUT_PICTURE));
+    Assertions.assertThat(adWithoutPicturesWithScoreUpdated)
+              .isNotNull()
+              .extracting(Ad::getScore)
+              .isEqualTo(Math.addExact(adWithoutPictures.getScore(), POINTS_WITHOUT_PICTURE));
   }
 
   @Test
@@ -49,23 +53,28 @@ public class AdShould {
     Ad adWithASDPictureAndAHDPicture = AdMother.adWithASDPictureAndAHDPicture();
 
     int hdPictureCount = Math.toIntExact(
-        adWithASDPictureAndAHDPicture.getPictures().stream().filter(Picture::isHighDefinition)
-            .count());
+        adWithASDPictureAndAHDPicture.getPictures()
+                                     .stream()
+                                     .filter(Picture::isHighDefinition)
+                                     .count());
     int sdPictureCount = Math.toIntExact(
-        adWithASDPictureAndAHDPicture.getPictures().stream().filter(Picture::isStandardDefinition)
-            .count());
+        adWithASDPictureAndAHDPicture.getPictures()
+                                     .stream()
+                                     .filter(Picture::isStandardDefinition)
+                                     .count());
 
     //Act
     Ad adWithASDPictureAndAHDPictureWithScoreUpdated = adWithASDPictureAndAHDPicture
         .updateScore(Arrays.asList(new PictureScore()));
 
     //Assert
-    Assertions.assertThat(adWithASDPictureAndAHDPictureWithScoreUpdated).isNotNull()
-        .extracting(Ad::getScore)
-        .isEqualTo(Math.addExact(
-            Math.addExact(adWithASDPictureAndAHDPicture.getScore(),
-                POINTS_WITH_A_SD_PICTURE * sdPictureCount),
-            POINTS_WITH_A_HD_PICTURE * hdPictureCount));
+    Assertions.assertThat(adWithASDPictureAndAHDPictureWithScoreUpdated)
+              .isNotNull()
+              .extracting(Ad::getScore)
+              .isEqualTo(Math.addExact(
+                  Math.addExact(adWithASDPictureAndAHDPicture.getScore(),
+                                POINTS_WITH_A_SD_PICTURE * sdPictureCount),
+                  POINTS_WITH_A_HD_PICTURE * hdPictureCount));
   }
 
   @Test
@@ -78,9 +87,11 @@ public class AdShould {
         .updateScore(Arrays.asList(new DescriptionScore()));
 
     //Assert
-    Assertions.assertThat(adFlatWithShortDescriptionWithScoreUpdated).isNotNull()
-        .extracting(Ad::getScore)
-        .isEqualTo(Math.addExact(adFlatWithShortDescription.getScore(), POINTS_WITH_DESCRIPTION));
+    Assertions.assertThat(adFlatWithShortDescriptionWithScoreUpdated)
+              .isNotNull()
+              .extracting(Ad::getScore)
+              .isEqualTo(
+                  Math.addExact(adFlatWithShortDescription.getScore(), POINTS_WITH_DESCRIPTION));
   }
 
   @Test
@@ -93,10 +104,11 @@ public class AdShould {
         .updateScore(Arrays.asList(new PictureScore(), new DescriptionScore()));
 
     //Assert
-    Assertions.assertThat(adFlatHDWithLongDescriptionWithScoreUpdated).isNotNull()
-        .extracting(Ad::getScore)
-        .isEqualTo(Math.addExact(adFlatHDWithLongDescription.getScore(),
-            POINTS_WITH_A_HD_PICTURE + POINTS_WITH_DESCRIPTION
-                + POINTS_FLAT_WITH_LONG_DESCRIPTION));
+    Assertions.assertThat(adFlatHDWithLongDescriptionWithScoreUpdated)
+              .isNotNull()
+              .extracting(Ad::getScore)
+              .isEqualTo(Math.addExact(adFlatHDWithLongDescription.getScore(),
+                                       POINTS_WITH_A_HD_PICTURE + POINTS_WITH_DESCRIPTION
+                                           + POINTS_FLAT_WITH_LONG_DESCRIPTION));
   }
 }

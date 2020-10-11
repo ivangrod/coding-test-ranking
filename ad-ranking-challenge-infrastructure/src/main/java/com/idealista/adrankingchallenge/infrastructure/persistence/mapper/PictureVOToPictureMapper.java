@@ -12,6 +12,6 @@ public class PictureVOToPictureMapper implements Function<PictureVO, Picture> {
   @Override
   public Picture apply(PictureVO pictureVO) {
     return new Picture(pictureVO.getId(), pictureVO.getUrl(),
-        Definition.valueOf(pictureVO.getQuality()));
+                       Definition.valueOf(pictureVO.getQuality()));
   }
 }

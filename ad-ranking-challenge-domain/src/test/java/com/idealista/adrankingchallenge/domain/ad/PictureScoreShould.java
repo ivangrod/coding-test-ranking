@@ -20,7 +20,8 @@ public class PictureScoreShould {
     int minusTenPoints = new PictureScore().pointsToAdd(adWithoutPictures);
 
     //Assert
-    Assertions.assertThat(minusTenPoints).isEqualTo(POINTS_WITHOUT_PICTURE);
+    Assertions.assertThat(minusTenPoints)
+              .isEqualTo(POINTS_WITHOUT_PICTURE);
   }
 
   @Test
@@ -34,7 +35,8 @@ public class PictureScoreShould {
 
     //Assert
     Assertions.assertThat(twentyPoints)
-        .isEqualTo(POINTS_WITH_A_HD_PICTURE * adWithAnHDPicture.getPictures().size());
+              .isEqualTo(POINTS_WITH_A_HD_PICTURE * adWithAnHDPicture.getPictures()
+                                                                     .size());
   }
 
   @Test
@@ -48,7 +50,8 @@ public class PictureScoreShould {
 
     //Assert
     Assertions.assertThat(fortyPoints)
-        .isEqualTo(POINTS_WITH_A_HD_PICTURE * adWithTwoHDPictures.getPictures().size());
+              .isEqualTo(POINTS_WITH_A_HD_PICTURE * adWithTwoHDPictures.getPictures()
+                                                                       .size());
   }
 
   @Test
@@ -62,7 +65,8 @@ public class PictureScoreShould {
 
     //Assert
     Assertions.assertThat(tenPoints)
-        .isEqualTo(POINTS_WITH_A_SD_PICTURE * adWithASDPicture.getPictures().size());
+              .isEqualTo(POINTS_WITH_A_SD_PICTURE * adWithASDPicture.getPictures()
+                                                                    .size());
   }
 
   @Test
@@ -72,18 +76,22 @@ public class PictureScoreShould {
     Ad adWithASDPictureAndAHDPicture = AdMother.adWithASDPictureAndAHDPicture();
 
     int hdPictureCount = Math.toIntExact(
-        adWithASDPictureAndAHDPicture.getPictures().stream().filter(Picture::isHighDefinition)
-            .count());
+        adWithASDPictureAndAHDPicture.getPictures()
+                                     .stream()
+                                     .filter(Picture::isHighDefinition)
+                                     .count());
     int sdPictureCount = Math.toIntExact(
-        adWithASDPictureAndAHDPicture.getPictures().stream().filter(Picture::isStandardDefinition)
-            .count());
+        adWithASDPictureAndAHDPicture.getPictures()
+                                     .stream()
+                                     .filter(Picture::isStandardDefinition)
+                                     .count());
 
     //Act
     int thirtyPoints = new PictureScore().pointsToAdd(adWithASDPictureAndAHDPicture);
 
     //Assert
     Assertions.assertThat(thirtyPoints)
-        .isEqualTo(Math.addExact(POINTS_WITH_A_SD_PICTURE * sdPictureCount,
-            POINTS_WITH_A_HD_PICTURE * hdPictureCount));
+              .isEqualTo(Math.addExact(POINTS_WITH_A_SD_PICTURE * sdPictureCount,
+                                       POINTS_WITH_A_HD_PICTURE * hdPictureCount));
   }
 }

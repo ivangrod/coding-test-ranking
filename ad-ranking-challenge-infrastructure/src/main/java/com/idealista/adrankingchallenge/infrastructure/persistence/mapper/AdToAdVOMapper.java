@@ -20,9 +20,12 @@ public class AdToAdVOMapper implements Function<Ad, AdVO> {
   @Override
   public AdVO apply(Ad ad) {
     // TODO Check FK with the picture identifiers
-    List<Integer> pictureIds = ad.getPictures().stream().map(Picture::getId)
-        .collect(Collectors.toList());
+    List<Integer> pictureIds = ad.getPictures()
+                                 .stream()
+                                 .map(Picture::getId)
+                                 .collect(Collectors.toList());
     return new AdVO(ad.getId(), ad.getTypology().name(), ad.getDescription(),
-        pictureIds, ad.getHouseSize(), ad.getGardenSize(), ad.getScore(), ad.getIrrelevantSince());
+                    pictureIds, ad.getHouseSize(), ad.getGardenSize(), ad.getScore(),
+                    ad.getIrrelevantSince());
   }
 }

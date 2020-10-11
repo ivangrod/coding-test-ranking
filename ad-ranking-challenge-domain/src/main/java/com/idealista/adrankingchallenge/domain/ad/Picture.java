@@ -34,10 +34,6 @@ public final class Picture {
     return definition.equals(Definition.SD);
   }
 
-  public enum Definition {
-    HD, SD;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -64,5 +60,9 @@ public final class Picture {
         ", url='" + url + '\'' +
         ", definition=" + definition +
         '}';
+  }
+
+  public enum Definition {
+    HD, SD;
   }
 }
