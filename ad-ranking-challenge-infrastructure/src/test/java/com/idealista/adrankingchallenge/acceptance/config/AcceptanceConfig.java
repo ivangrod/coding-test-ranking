@@ -23,6 +23,6 @@ public class AcceptanceConfig {
       AdToAdVOMapper adToAdVOMapper, PictureVOToPictureMapper pictureVOToPictureMapper,
       PictureToPictureVOMapper pictureToPictureVOMapper) {
     return new AdRepositoryStub(adVOToAdMapper, adToAdVOMapper, pictureVOToPictureMapper,
-        pictureToPictureVOMapper);
+                                pictureToPictureVOMapper);
   }
 }

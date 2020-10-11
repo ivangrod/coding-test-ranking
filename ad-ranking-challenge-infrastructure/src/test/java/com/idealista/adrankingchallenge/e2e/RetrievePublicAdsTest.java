@@ -39,9 +39,9 @@ public class RetrievePublicAdsTest {
 
     // Assert
     response.andExpect(status().isOk())
-        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$", hasSize(10)))
-        .andExpect(jsonPath("$.[0]", is(notNullValue())))
-        .andExpect(jsonPath("$.[9]", is(notNullValue())));
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$", hasSize(10)))
+            .andExpect(jsonPath("$.[0]", is(notNullValue())))
+            .andExpect(jsonPath("$.[9]", is(notNullValue())));
   }
 }

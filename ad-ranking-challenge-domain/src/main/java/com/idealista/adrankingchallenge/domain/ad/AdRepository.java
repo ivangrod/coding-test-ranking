@@ -1,7 +1,6 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
 import com.idealista.adrankingchallenge.domain.ad.search.AdsFound;
-import java.util.Optional;
 
 public interface AdRepository {
 

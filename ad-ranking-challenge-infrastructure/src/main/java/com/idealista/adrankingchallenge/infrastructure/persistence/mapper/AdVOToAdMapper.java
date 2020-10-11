@@ -20,8 +20,10 @@ public class AdVOToAdMapper {
   public Ad convert(AdVO adVO, List<PictureVO> picturesVORelated) {
     // TODO Manager Date
     return new Ad(adVO.getId(), Typology.valueOf(adVO.getTypology()), adVO.getDescription(),
-        picturesVORelated.stream().map(pictureVOToPictureMapper).collect(Collectors.toList()),
-        adVO.getHouseSize(), adVO.getGardenSize(), adVO.getScore(),
-        null);
+                  picturesVORelated.stream()
+                                   .map(pictureVOToPictureMapper)
+                                   .collect(Collectors.toList()),
+                  adVO.getHouseSize(), adVO.getGardenSize(), adVO.getScore(),
+                  null);
   }
 }

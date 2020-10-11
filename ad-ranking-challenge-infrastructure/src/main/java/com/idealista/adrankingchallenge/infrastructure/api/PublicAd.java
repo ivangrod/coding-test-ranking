@@ -25,9 +25,13 @@ public class PublicAd {
   }
 
   public static PublicAd buildPublicAdFromAdFound(AdFound adFound) {
-    return new PublicAd(adFound.getId(), adFound.getTypology().name(), adFound.getDescription(),
-        adFound.getPictures().stream().map(Picture::getUrl).collect(Collectors.toList()),
-        adFound.getHouseSize(), adFound.getGardenSize());
+    return new PublicAd(adFound.getId(), adFound.getTypology()
+                                                .name(), adFound.getDescription(),
+                        adFound.getPictures()
+                               .stream()
+                               .map(Picture::getUrl)
+                               .collect(Collectors.toList()),
+                        adFound.getHouseSize(), adFound.getGardenSize());
   }
 
   public Integer getId() {

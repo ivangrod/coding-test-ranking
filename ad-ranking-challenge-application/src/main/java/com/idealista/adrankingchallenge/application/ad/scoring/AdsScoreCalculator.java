@@ -23,8 +23,9 @@ public class AdsScoreCalculator {
   }
 
   public void execute() {
-    List<Ad> adsToCalculateScore = adRepository.findAllOrderByScore().getAds().orElse(
-        Collections.emptyList());
+    List<Ad> adsToCalculateScore = adRepository.findAllOrderByScore()
+                                               .getAds()
+                                               .orElse(Collections.emptyList());
     adsToCalculateScore.forEach(ad -> {
       Ad adWithStoreUpdated = ad.updateScore(scoreHandlers);
       adRepository.save(adWithStoreUpdated);

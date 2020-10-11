@@ -24,7 +24,8 @@ public class DescriptionScoreShould {
     int zeroPoint = new DescriptionScore().pointsToAdd(adWithoutDescription);
 
     //Assert
-    Assertions.assertThat(zeroPoint).isEqualTo(0);
+    Assertions.assertThat(zeroPoint)
+              .isEqualTo(0);
   }
 
   @Test
@@ -37,7 +38,8 @@ public class DescriptionScoreShould {
     int fivePoints = new DescriptionScore().pointsToAdd(adWithDescription);
 
     //Assert
-    Assertions.assertThat(fivePoints).isEqualTo(POINTS_WITH_DESCRIPTION);
+    Assertions.assertThat(fivePoints)
+              .isEqualTo(POINTS_WITH_DESCRIPTION);
   }
 
   @Test
@@ -50,7 +52,8 @@ public class DescriptionScoreShould {
     int fivePoints = new DescriptionScore().pointsToAdd(adFlatWithShortDescription);
 
     //Assert
-    Assertions.assertThat(fivePoints).isEqualTo(POINTS_WITH_DESCRIPTION);
+    Assertions.assertThat(fivePoints)
+              .isEqualTo(POINTS_WITH_DESCRIPTION);
   }
 
   @Test
@@ -64,7 +67,7 @@ public class DescriptionScoreShould {
 
     //Assert
     Assertions.assertThat(fifteenPoints)
-        .isEqualTo(POINTS_WITH_DESCRIPTION + POINTS_FLAT_WITH_MEDIUM_DESCRIPTION);
+              .isEqualTo(POINTS_WITH_DESCRIPTION + POINTS_FLAT_WITH_MEDIUM_DESCRIPTION);
   }
 
   @Test
@@ -78,7 +81,7 @@ public class DescriptionScoreShould {
 
     //Assert
     Assertions.assertThat(thirtyFivePoints)
-        .isEqualTo(POINTS_WITH_DESCRIPTION + POINTS_FLAT_WITH_LONG_DESCRIPTION);
+              .isEqualTo(POINTS_WITH_DESCRIPTION + POINTS_FLAT_WITH_LONG_DESCRIPTION);
   }
 
   @Test
@@ -92,7 +95,7 @@ public class DescriptionScoreShould {
 
     //Assert
     Assertions.assertThat(twentyFivePoints)
-        .isEqualTo(POINTS_WITH_DESCRIPTION + POINTS_CHALET_WITH_LONG_DESCRIPTION);
+              .isEqualTo(POINTS_WITH_DESCRIPTION + POINTS_CHALET_WITH_LONG_DESCRIPTION);
   }
 
   @Test
@@ -107,8 +110,9 @@ public class DescriptionScoreShould {
 
     //Assert
     Assertions.assertThat(tenPoints)
-        .isEqualTo(POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
-            .size()));
+              .isEqualTo(
+                  POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
+                      .size()));
   }
 
   @Test
@@ -124,8 +128,9 @@ public class DescriptionScoreShould {
 
     //Assert
     Assertions.assertThat(twentyPoints)
-        .isEqualTo(POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
-            .size()));
+              .isEqualTo(
+                  POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
+                      .size()));
   }
 
   @Test
@@ -142,8 +147,9 @@ public class DescriptionScoreShould {
 
     //Assert
     Assertions.assertThat(thirtyPoints)
-        .isEqualTo(POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
-            .size()));
+              .isEqualTo(
+                  POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
+                      .size()));
   }
 
   @Test
@@ -160,8 +166,8 @@ public class DescriptionScoreShould {
 
     //Assert
     Assertions.assertThat(twentyFivePoints)
-        .isEqualTo(POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION
-            * misspelledKeywordInDescription
-            .size()));
+              .isEqualTo(POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION
+                  * misspelledKeywordInDescription
+                  .size()));
   }
 }

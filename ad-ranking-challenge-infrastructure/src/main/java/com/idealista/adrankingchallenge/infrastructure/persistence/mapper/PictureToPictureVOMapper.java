@@ -10,6 +10,7 @@ public class PictureToPictureVOMapper implements Function<Picture, PictureVO> {
 
   @Override
   public PictureVO apply(Picture picture) {
-    return new PictureVO(picture.getId(), picture.getUrl(), picture.getDefinition().name());
+    return new PictureVO(picture.getId(), picture.getUrl(), picture.getDefinition()
+                                                                   .name());
   }
 }

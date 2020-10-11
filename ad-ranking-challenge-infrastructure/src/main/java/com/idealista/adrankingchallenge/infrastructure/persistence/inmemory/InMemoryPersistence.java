@@ -21,16 +21,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class InMemoryPersistence implements AdRepository {
 
+  private final AdVOToAdMapper adVOToAdMapper;
+  private final AdToAdVOMapper adToAdVOMapper;
+  private final PictureVOToPictureMapper pictureVOToPictureMapper;
+  private final PictureToPictureVOMapper pictureToPictureVOMapper;
   private List<AdVO> ads;
   private Map<Integer, AdVO> adsWithPrimaryKey;
   private List<PictureVO> pictures;
   private Map<Integer, PictureVO> picturesWithPrimaryKey;
-
-  private final AdVOToAdMapper adVOToAdMapper;
-  private final AdToAdVOMapper adToAdVOMapper;
-
-  private final PictureVOToPictureMapper pictureVOToPictureMapper;
-  private final PictureToPictureVOMapper pictureToPictureVOMapper;
 
   public InMemoryPersistence(AdVOToAdMapper adVOToAdMapper, AdToAdVOMapper adToAdVOMapper,
       PictureVOToPictureMapper pictureVOToPictureMapper,
@@ -43,24 +41,24 @@ public class InMemoryPersistence implements AdRepository {
 
     ads = new ArrayList<AdVO>();
     ads.add(new AdVO(1, "CHALET", "Este piso es una ganga, compra, compra, COMPRA!!!!!",
-        Collections.<Integer>emptyList(), 300, null, null, null));
+                     Collections.<Integer>emptyList(), 300, null, null, null));
     ads.add(new AdVO(2, "FLAT",
-        "Nuevo ático céntrico recién reformado. No deje pasar la oportunidad y adquiera este ático de lujo",
-        Arrays
-            .asList(4), 300, null, null, null));
+                     "Nuevo ático céntrico recién reformado. No deje pasar la oportunidad y adquiera este ático de lujo",
+                     Arrays
+                         .asList(4), 300, null, null, null));
     ads.add(new AdVO(3, "CHALET", "", Arrays.asList(2), 300, null, null, null));
     ads.add(new AdVO(4, "FLAT", "Ático céntrico muy luminoso y recién reformado, parece nuevo",
-        Arrays.asList(5), 300, null, null, null));
+                     Arrays.asList(5), 300, null, null, null));
     ads.add(new AdVO(5, "FLAT", "Pisazo,", Arrays.asList(3, 8), 300, null, null, null));
     ads.add(new AdVO(6, "GARAGE", "", Arrays.asList(6), 300, null, null, null));
     ads.add(
         new AdVO(7, "GARAGE", "Garaje en el centro de Albacete", Collections.<Integer>emptyList(),
-            300, null, null, null));
+                 300, null, null, null));
     ads.add(new AdVO(8, "CHALET",
-        "Maravilloso chalet situado en lAs afueras de un pequeño pueblo rural. El entorno es espectacular, las vistas magníficas. ¡Cómprelo ahora!",
-        Arrays.asList(1, 7), 300, null, null, null));
+                     "Maravilloso chalet situado en lAs afueras de un pequeño pueblo rural. El entorno es espectacular, las vistas magníficas. ¡Cómprelo ahora!",
+                     Arrays.asList(1, 7), 300, null, null, null));
     ads.add(new AdVO(9, "FLAT", "La casa es una maravilla, sinceramente", Arrays.asList(1, 7), 300,
-        null, null, null));
+                     null, null, null));
     ads.add(new AdVO(10, "CHALET", "Poca broma el piso", Arrays.asList(2), 300, null, null, null));
 
     pictures = new ArrayList<PictureVO>();
@@ -75,23 +73,29 @@ public class InMemoryPersistence implements AdRepository {
     pictures.add(new PictureVO(9, "http://www.idealista.com/pictures/9", "HD"));
     pictures.add(new PictureVO(10, "http://www.idealista.com/pictures/10", "SD"));
 
-    ads.stream().map(adVO -> adsWithPrimaryKey.put(adVO.getId(), adVO));
-    pictures.stream().map(pictureVO -> picturesWithPrimaryKey.put(pictureVO.getId(), pictureVO));
+    ads.stream()
+       .map(adVO -> adsWithPrimaryKey.put(adVO.getId(), adVO));
+    pictures.stream()
+            .map(pictureVO -> picturesWithPrimaryKey.put(pictureVO.getId(), pictureVO));
   }
 
   @Override
   public AdsFound findAllOrderByScore() {
     // TODO Make compare -> sorted(Comparator.nullsLast(Comparator.comparing(AdVO::getScore)))
     return new AdsFound(
-        ads.stream().map(adVO -> adVOToAdMapper.convert(adVO, Collections.emptyList())).collect(Collectors.toList()));
+        ads.stream()
+           .map(adVO -> adVOToAdMapper.convert(adVO, Collections.emptyList()))
+           .collect(Collectors.toList()));
   }
 
   @Override
   public void save(Ad ad) {
     picturesWithPrimaryKey.putAll(
-        ad.getPictures().stream().map(pictureToPictureVOMapper)
-            .collect(Collectors.toMap(PictureVO::getId, Function.identity(),
-                (existing, replacement) -> existing)));
+        ad.getPictures()
+          .stream()
+          .map(pictureToPictureVOMapper)
+          .collect(Collectors.toMap(PictureVO::getId, Function.identity(),
+                                    (existing, replacement) -> existing)));
     adsWithPrimaryKey.put(ad.getId(), adToAdVOMapper.apply(ad));
   }
 

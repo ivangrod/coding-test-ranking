@@ -53,12 +53,12 @@ public final class Ad {
 
   public Ad withScore(Integer score) {
     return new Ad(this.id, this.typology, this.description, this.pictures, this.houseSize,
-        this.gardenSize, score, this.irrelevantSince);
+                  this.gardenSize, score, this.irrelevantSince);
   }
 
   public Ad withDate(Date irrelevantSince) {
     return new Ad(this.id, this.typology, this.description, this.pictures, this.houseSize,
-        this.gardenSize, this.score, irrelevantSince);
+                  this.gardenSize, this.score, irrelevantSince);
   }
 
   public Integer getId() {
@@ -117,8 +117,7 @@ public final class Ad {
   public int hashCode() {
     return Objects
         .hash(descriptionKeywords, id, typology, description, pictures, houseSize, gardenSize,
-            score,
-            irrelevantSince);
+              score, irrelevantSince);
   }
 
   @Override
@@ -207,8 +206,10 @@ public final class Ad {
       return 0;
     }
     return Math.toIntExact(Arrays.stream(this.description.split(StringUtils.SPACE))
-        .filter(descriptionWords -> descriptionKeywords.contains(descriptionWords)).distinct()
-        .count());
+                                 .filter(descriptionWords ->
+                                             descriptionKeywords.contains(descriptionWords))
+                                 .distinct()
+                                 .count());
   }
 
   private class DescriptionKeywords extends ArrayList<String> {

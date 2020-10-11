@@ -19,9 +19,15 @@ public class PictureScore implements ScoreHandler {
       points = points + POINTS_WITHOUT_PICTURE;
     } else {
       int highDefinitionPicturesCount = Math
-          .toIntExact(ad.getPictures().stream().filter(Picture::isHighDefinition).count());
+          .toIntExact(ad.getPictures()
+                        .stream()
+                        .filter(Picture::isHighDefinition)
+                        .count());
       int standardDefinitionPicturesCount = Math
-          .toIntExact(ad.getPictures().stream().filter(Picture::isStandardDefinition).count());
+          .toIntExact(ad.getPictures()
+                        .stream()
+                        .filter(Picture::isStandardDefinition)
+                        .count());
 
       points += (highDefinitionPicturesCount * POINTS_WITH_HD_PICTURE) +
           (standardDefinitionPicturesCount * POINTS_WITH_SD_PICTURE);

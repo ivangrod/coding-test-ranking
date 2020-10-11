@@ -2,7 +2,6 @@ package com.idealista.adrankingchallenge.domain.ad.scoring;
 
 import com.idealista.adrankingchallenge.domain.ad.Ad;
 import com.idealista.adrankingchallenge.domain.ad.ScoreHandler;
-import org.apache.commons.lang3.StringUtils;
 
 public class DescriptionScore implements ScoreHandler {
 

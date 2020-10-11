@@ -35,10 +35,10 @@ public class AdsScoreCalculatorTest {
 
     // Given
     Ad adWithoutPictures = new Ad(1, Typology.FLAT, "Beautiful house", Collections.emptyList(), 0,
-        0);
+                                  0);
     List<Picture> twoHDPictures = Arrays
         .asList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.HD),
-            new Picture(2, "http://www.idealista.com/pictures/2", Definition.HD));
+                new Picture(2, "http://www.idealista.com/pictures/2", Definition.HD));
     Ad adWithSDAndHDPicture = new Ad(2, Typology.FLAT, "Beautiful house", twoHDPictures, 0, 0);
 
     adRepositoryStub.save(adWithoutPictures);
@@ -53,7 +53,9 @@ public class AdsScoreCalculatorTest {
     AdsFound adsFound = adRepositoryStub.findAllOrderByScore();
 
     // Then
-    Assertions.assertThat(adsFound.getAds().get()).isNotEmpty()
-        .containsSequence(adWithPicturesScoreUpdate, adWithoutPicturesScoreUpdate);
+    Assertions.assertThat(adsFound.getAds()
+                                  .get())
+              .isNotEmpty()
+              .containsSequence(adWithPicturesScoreUpdate, adWithoutPicturesScoreUpdate);
   }
 }
