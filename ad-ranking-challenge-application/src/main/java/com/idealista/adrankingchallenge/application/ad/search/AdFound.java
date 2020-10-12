@@ -32,11 +32,15 @@ public class AdFound {
     this.irrelevantSince = irrelevantSince;
   }
 
+  public static AdFound fromAd(Ad ad) {
+    return new AdFound(ad.getId(), ad.getTypology(), ad.getDescription(),
+                       ad.getPictures(), ad.getHouseSize(), ad.getGardenSize(),
+                       ad.getScore(), ad.getIrrelevantSince());
+  }
+
   public static List<AdFound> fromAds(List<Ad> ads) {
     return ads.stream()
-              .map(ad -> new AdFound(ad.getId(), ad.getTypology(), ad.getDescription(),
-                                     ad.getPictures(), ad.getHouseSize(), ad.getGardenSize(),
-                                     ad.getScore(), ad.getIrrelevantSince()))
+              .map(AdFound::fromAd)
               .collect(Collectors.toList());
   }
 

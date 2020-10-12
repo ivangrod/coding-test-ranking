@@ -1,6 +1,7 @@
 package com.idealista.adrankingchallenge.acceptance.config;
 
 import com.idealista.adrankingchallenge.domain.ad.AdRepository;
+import com.idealista.adrankingchallenge.infrastructure.persistence.inmemory.InMemoryPersistence;
 import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.AdToAdVOMapper;
 import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.AdVOToAdMapper;
 import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.PictureToPictureVOMapper;
@@ -12,17 +13,14 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@ComponentScan({"com.idealista.adrankingchallenge.infrastructure.di",
-    "com.idealista.adrankingchallenge.infrastructure.persistence.mapper"})
+@ComponentScan(basePackages = {"com.idealista.adrankingchallenge.infrastructure.di",
+    "com.idealista.adrankingchallenge.infrastructure.persistence"})
 @Profile("test-repository")
 public class AcceptanceConfig {
 
   @Bean
   @Primary
-  public AdRepository adRepositoryStub(AdVOToAdMapper adVOToAdMapper,
-      AdToAdVOMapper adToAdVOMapper, PictureVOToPictureMapper pictureVOToPictureMapper,
-      PictureToPictureVOMapper pictureToPictureVOMapper) {
-    return new AdRepositoryStub(adVOToAdMapper, adToAdVOMapper, pictureVOToPictureMapper,
-                                pictureToPictureVOMapper);
+  public InMemoryPersistence inMemoryPersistenceStub() {
+    return new InMemoryPersistenceStub();
   }
 }

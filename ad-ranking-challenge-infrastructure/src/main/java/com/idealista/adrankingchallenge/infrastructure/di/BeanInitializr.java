@@ -4,6 +4,8 @@ import com.idealista.adrankingchallenge.application.ad.scoring.AdsScoreCalculato
 import com.idealista.adrankingchallenge.application.ad.search.AdIrrelevantSearcher;
 import com.idealista.adrankingchallenge.application.ad.search.AdPublicSearcher;
 import com.idealista.adrankingchallenge.domain.ad.AdRepository;
+import com.idealista.adrankingchallenge.infrastructure.persistence.inmemory.InMemoryPersistence;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -23,5 +25,11 @@ public class BeanInitializr {
   @Bean
   public AdsScoreCalculator adsScoreCalculator(AdRepository adRepository) {
     return new AdsScoreCalculator(adRepository);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public InMemoryPersistence inMemoryPersistence() {
+    return new InMemoryPersistence();
   }
 }
