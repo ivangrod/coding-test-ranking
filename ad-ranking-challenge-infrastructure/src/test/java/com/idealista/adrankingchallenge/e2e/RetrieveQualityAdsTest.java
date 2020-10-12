@@ -42,8 +42,8 @@ public class RetrieveQualityAdsTest {
     // Assert
     response.andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$", hasSize(10)))
+            .andExpect(jsonPath("$", hasSize(5)))
             .andExpect(jsonPath("$.[0]", is(notNullValue())))
-            .andExpect(jsonPath("$.[9]", is(notNullValue())));
+            .andExpect(jsonPath("$.[4]", is(notNullValue())));
   }
 }

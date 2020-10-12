@@ -112,8 +112,7 @@ public class AdsSearcherTest {
               .allMatch(
                   adFound ->
                       adFound.getScore() < 40 && adFound.getIrrelevantSince()
-                                                        .before(Date.from(
-                                                            Instant.now())))
+                                                        .before(Date.from(Instant.now())))
               .doesNotContain(AdFound.fromAd(adWithPicturesScoreUpdate));
   }
 }
