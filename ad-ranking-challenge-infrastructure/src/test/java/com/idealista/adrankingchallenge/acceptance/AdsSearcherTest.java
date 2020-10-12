@@ -7,16 +7,12 @@ import com.idealista.adrankingchallenge.application.ad.search.AdFound;
 import com.idealista.adrankingchallenge.application.ad.search.AdIrrelevantSearcher;
 import com.idealista.adrankingchallenge.application.ad.search.AdPublicSearcher;
 import com.idealista.adrankingchallenge.application.ad.search.SearchingAdReturn;
+import com.idealista.adrankingchallenge.create.AdMother;
 import com.idealista.adrankingchallenge.domain.ad.Ad;
 import com.idealista.adrankingchallenge.domain.ad.AdRepository;
-import com.idealista.adrankingchallenge.domain.ad.Picture;
-import com.idealista.adrankingchallenge.domain.ad.Picture.Definition;
-import com.idealista.adrankingchallenge.domain.ad.Typology;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
+import java.util.function.Predicate;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,21 +51,16 @@ public class AdsSearcherTest {
   public void should_Return_Only_Relevant_Ads_When_Store_Calculator_Is_Invoked() {
 
     // Given
-    Ad adWithoutPictures = Ad.createAd(1, Typology.FLAT, StringUtils.EMPTY, Arrays
-                                           .asList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.SD)), 0,
-                                       0);
-    List<Picture> twoHDPictures = Arrays
-        .asList(new Picture(2, "http://www.idealista.com/pictures/2", Definition.HD),
-                new Picture(3, "http://www.idealista.com/pictures/3", Definition.HD));
-    Ad adWithSDAndHDPicture = Ad.createAd(2, Typology.FLAT, "Beautiful house", twoHDPictures, 0, 0);
+    Ad adWithoutPictures = AdMother.adFlatWithouDescriptionWithAnSDPictureAndIdentifierFrom(1);
+    Ad adWithSDAndHDPicture = AdMother.adWithTwoHDPicturesAndIdentifierFrom(2);
 
     adRepository.save(adWithoutPictures);
     adRepository.save(adWithSDAndHDPicture);
 
     adsScoreCalculator.execute();
 
-    Ad adWithoutPicturesScoreUpdate = adRepository.findById(adWithoutPictures.getId());
-    Ad adWithPicturesScoreUpdate = adRepository.findById(adWithSDAndHDPicture.getId());
+    Ad adWithoutPicturesScoreUpdate = adRepository.findById(adWithoutPictures.getId().value());
+    Ad adWithPicturesScoreUpdate = adRepository.findById(adWithSDAndHDPicture.getId().value());
 
     // When
     SearchingAdReturn adsPublicFound = adPublicSearcher.execute();
@@ -86,21 +77,16 @@ public class AdsSearcherTest {
   public void should_Return_Only_Irrelevant_Ads_When_Store_Calculator_Is_Invoked() {
 
     // Given
-    Ad adWithoutPictures = Ad.createAd(1, Typology.FLAT, StringUtils.EMPTY, Arrays
-                                           .asList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.SD)), 0,
-                                       0);
-    List<Picture> twoHDPictures = Arrays
-        .asList(new Picture(2, "http://www.idealista.com/pictures/2", Definition.HD),
-                new Picture(3, "http://www.idealista.com/pictures/3", Definition.HD));
-    Ad adWithSDAndHDPicture = Ad.createAd(2, Typology.FLAT, "Beautiful house", twoHDPictures, 0, 0);
+    Ad adWithoutPictures = AdMother.adFlatWithouDescriptionWithAnSDPictureAndIdentifierFrom(1);
+    Ad adWithSDAndHDPicture = AdMother.adWithTwoHDPicturesAndIdentifierFrom(2);
 
     adRepository.save(adWithoutPictures);
     adRepository.save(adWithSDAndHDPicture);
 
     adsScoreCalculator.execute();
 
-    Ad adWithoutPicturesScoreUpdate = adRepository.findById(adWithoutPictures.getId());
-    Ad adWithPicturesScoreUpdate = adRepository.findById(adWithSDAndHDPicture.getId());
+    Ad adWithoutPicturesScoreUpdate = adRepository.findById(adWithoutPictures.getId().value());
+    Ad adWithPicturesScoreUpdate = adRepository.findById(adWithSDAndHDPicture.getId().value());
 
     // When
     SearchingAdReturn adsPublicFound = adIrrelevantSearcher.execute();
@@ -109,10 +95,11 @@ public class AdsSearcherTest {
     Assertions.assertThat(adsPublicFound.getAds())
               .isNotEmpty()
               .containsExactly(AdFound.fromAd(adWithoutPicturesScoreUpdate))
-              .allMatch(
-                  adFound ->
-                      adFound.getScore() < 40 && adFound.getIrrelevantSince()
-                                                        .before(Date.from(Instant.now())))
+              .allMatch(isIrrelevantBeforeNow())
               .doesNotContain(AdFound.fromAd(adWithPicturesScoreUpdate));
+  }
+
+  private Predicate<? super AdFound> isIrrelevantBeforeNow() {
+    return adFound -> adFound.getScore() < 40 && adFound.getIrrelevantSince().before(Date.from(Instant.now()));
   }
 }

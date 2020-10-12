@@ -6,9 +6,9 @@ import com.idealista.adrankingchallenge.domain.ad.ScoreHandler;
 
 public class PictureScore implements ScoreHandler {
 
-  private static final Integer POINTS_WITHOUT_PICTURE = -10;
-  private static final Integer POINTS_WITH_HD_PICTURE = 20;
-  private static final Integer POINTS_WITH_SD_PICTURE = 10;
+  public static final Integer POINTS_WITHOUT_PICTURE = -10;
+  public static final Integer POINTS_WITH_HD_PICTURE = 20;
+  public static final Integer POINTS_WITH_SD_PICTURE = 10;
 
   @Override
   public Integer pointsToAdd(Ad ad) {

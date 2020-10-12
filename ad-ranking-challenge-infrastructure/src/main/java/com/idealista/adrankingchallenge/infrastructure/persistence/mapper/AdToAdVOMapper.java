@@ -24,8 +24,8 @@ public class AdToAdVOMapper implements Function<Ad, AdVO> {
                                  .stream()
                                  .map(Picture::getId)
                                  .collect(Collectors.toList());
-    return new AdVO(ad.getId(), ad.getTypology().name(), ad.getDescription(),
-                    pictureIds, ad.getHouseSize(), ad.getGardenSize(), ad.getScore(),
-                    ad.getIrrelevantSince());
+    return new AdVO(ad.getId().value(), ad.getTypology().name(), ad.getDescription().value(),
+                    pictureIds, ad.getHouseSize().value(), ad.getGardenSize().value(), ad.getScore().value(),
+                    ad.getIrrelevantSince().toDate());
   }
 }

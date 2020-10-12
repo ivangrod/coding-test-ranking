@@ -1,12 +1,13 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
+import static com.idealista.adrankingchallenge.domain.ad.scoring.AdCompleteScore.POINTS_COMPLETE_AD;
+
+import com.idealista.adrankingchallenge.domain.ad.create.AdMother;
 import com.idealista.adrankingchallenge.domain.ad.scoring.AdCompleteScore;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class AdCompleteScoreShould {
-
-  private static final Integer POINTS_COMPLETE_AD = 40;
 
   @Test
   public void return_Forty_Points_Given_A_Flat_Complete_Ad() {

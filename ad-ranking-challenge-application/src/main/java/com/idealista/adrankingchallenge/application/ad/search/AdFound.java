@@ -33,9 +33,9 @@ public class AdFound {
   }
 
   public static AdFound fromAd(Ad ad) {
-    return new AdFound(ad.getId(), ad.getTypology(), ad.getDescription(),
-                       ad.getPictures(), ad.getHouseSize(), ad.getGardenSize(),
-                       ad.getScore(), ad.getIrrelevantSince());
+    return new AdFound(ad.getId().value(), ad.getTypology(), ad.getDescription().value(),
+                       ad.getPictures(), ad.getHouseSize().value(), ad.getGardenSize().value(),
+                       ad.getScore().value(), ad.getIrrelevantSince().toDate());
   }
 
   public static List<AdFound> fromAds(List<Ad> ads) {

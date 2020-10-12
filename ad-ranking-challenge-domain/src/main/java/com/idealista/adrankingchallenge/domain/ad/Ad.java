@@ -1,76 +1,65 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
-import java.text.Collator;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.StringTokenizer;
-import org.apache.commons.lang3.StringUtils;
 
 public final class Ad {
 
-  private final static Integer MINIMUN_WORDS_MEDIUM_DESCRIPTION = 20;
-  private final static Integer MAXIMUN_WORDS_MEDIUM_DESCRIPTION = 49;
-
-  private static final Integer MAX_SCORE = 100;
-  private static final Integer MIN_SCORE = 0;
-
-  private final DescriptionKeywords descriptionKeywords = new DescriptionKeywords(
-      new String[]{"Luminoso", "Nuevo", "Céntrico", "Reformado", "Ático"});
-
-  private final Integer id;
+  private final AdId id;
   private final Typology typology;
-  private final String description;
+  private final AdDescription description;
   private final List<Picture> pictures;
-  private final Integer houseSize;
-  private final Integer gardenSize;
-  private final Integer score;
-  private final Date irrelevantSince;
+  private final AdSize houseSize;
+  private final AdSize gardenSize;
+  private final AdScore score;
+  private final AdDate irrelevantSince;
 
-  private Ad(Integer id, Typology typology, String description, List<Picture> pictureUrls, Integer houseSize, Integer gardenSize) {
+  private Ad(AdId id, Typology typology, AdDescription description, List<Picture> pictureUrls,
+      AdSize houseSize, AdSize gardenSize) {
     this.id = id;
     this.typology = typology;
     this.description = description;
     this.pictures = pictureUrls;
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
-    this.score = 0;
-    this.irrelevantSince = null;
+    this.score = new AdScore(0);
+    this.irrelevantSince = new AdDate();
   }
 
-  private Ad(Integer id, Typology typology, String description,
-      List<Picture> pictureUrls, Integer houseSize, Integer gardenSize, Integer score, Date irrelevantSince) {
+  private Ad(AdId id, Typology typology, AdDescription description,
+      List<Picture> pictureUrls, AdSize houseSize, AdSize gardenSize, AdScore score,
+      AdDate irrelevantSince) {
     this.id = id;
     this.typology = typology;
     this.description = description;
     this.pictures = pictureUrls;
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
-    this.score = (score != null) ? Math.max(MIN_SCORE, Math.min(MAX_SCORE, score)) : 0;
+    this.score = score;
     this.irrelevantSince = irrelevantSince;
   }
 
-  public static Ad createAd(Integer id, Typology typology, String description, List<Picture> pictureUrls, Integer houseSize,
-      Integer gardenSize) {
+  public static Ad createAd(AdId id, Typology typology, AdDescription description,
+      List<Picture> pictureUrls, AdSize houseSize, AdSize gardenSize) {
     return new Ad(id, typology, description, pictureUrls, houseSize, gardenSize);
   }
 
-  public Ad withScore(Integer score) {
-    // TODO Responsability of ScoreVO :/
-    Date irrelevantSince = (this.score < 40) ? Date.from(Instant.now()) : null;
-    return new Ad(this.id, this.typology, this.description, this.pictures, this.houseSize,
-                  this.gardenSize, score, irrelevantSince);
-  }
-
-  public static Ad of(Integer id, Typology typology, String description,
-      List<Picture> pictureUrls, Integer houseSize, Integer gardenSize, Integer score, Date irrelevantSince) {
+  public static Ad of(AdId id, Typology typology, AdDescription description,
+      List<Picture> pictureUrls, AdSize houseSize, AdSize gardenSize, AdScore score,
+      AdDate irrelevantSince) {
     return new Ad(id, typology, description, pictureUrls, houseSize, gardenSize, score, irrelevantSince);
   }
 
-  public Integer getId() {
+  public Ad withScore(Integer score) {
+    AdScore newAdScore = new AdScore(score);
+    AdDate irrelevantSince = new AdDate(newAdScore.isLowerIrrelevantThreshold() ? Date.from(Instant.now()) : null);
+    return new Ad(this.id, this.typology, this.description, this.pictures, this.houseSize,
+                  this.gardenSize, newAdScore, irrelevantSince);
+  }
+
+  public AdId getId() {
     return id;
   }
 
@@ -78,7 +67,7 @@ public final class Ad {
     return typology;
   }
 
-  public String getDescription() {
+  public AdDescription getDescription() {
     return description;
   }
 
@@ -86,28 +75,36 @@ public final class Ad {
     return pictures;
   }
 
-  public Integer getHouseSize() {
+  public AdSize getHouseSize() {
     return houseSize;
   }
 
-  public Integer getGardenSize() {
+  public AdSize getGardenSize() {
     return gardenSize;
   }
 
-  public Integer getScore() {
+  public AdScore getScore() {
     return score;
   }
 
-  public Date getIrrelevantSince() {
+  public AdDate getIrrelevantSince() {
     return irrelevantSince;
   }
 
-  public boolean isIrrelevant(){
-    return this.score < 40;
+  public boolean isIrrelevant() {
+    return this.score.isLowerIrrelevantThreshold();
   }
 
-  public boolean isNotIrrelevant(){
-    return this.score >= 40;
+  public boolean isNotIrrelevant() {
+    return this.score.isHigherOrEqualIrrelevantThreshold();
+  }
+
+  public Ad updateScore(List<ScoreHandler> scoreHandlers) {
+    Integer newScore = Integer.valueOf(0);
+    for (ScoreHandler scoreHandler : scoreHandlers) {
+      newScore += scoreHandler.pointsToAdd(this);
+    }
+    return withScore(newScore);
   }
 
   @Override
@@ -119,8 +116,7 @@ public final class Ad {
       return false;
     }
     Ad ad = (Ad) o;
-    return Objects.equals(descriptionKeywords, ad.descriptionKeywords) &&
-        Objects.equals(id, ad.id) &&
+    return Objects.equals(id, ad.id) &&
         typology == ad.typology &&
         Objects.equals(description, ad.description) &&
         Objects.equals(pictures, ad.pictures) &&
@@ -132,18 +128,15 @@ public final class Ad {
 
   @Override
   public int hashCode() {
-    return Objects
-        .hash(descriptionKeywords, id, typology, description, pictures, houseSize, gardenSize,
-              score, irrelevantSince);
+    return Objects.hash(id, typology, description, pictures, houseSize, gardenSize, score, irrelevantSince);
   }
 
   @Override
   public String toString() {
     return "Ad{" +
-        "descriptionKeywords=" + descriptionKeywords +
-        ", id=" + id +
+        "id=" + id +
         ", typology=" + typology +
-        ", description='" + description + '\'' +
+        ", description=" + description +
         ", pictures=" + pictures +
         ", houseSize=" + houseSize +
         ", gardenSize=" + gardenSize +
@@ -152,56 +145,20 @@ public final class Ad {
         '}';
   }
 
-  public Ad updateScore(List<ScoreHandler> scoreHandlers) {
-    Integer newScore = Integer.valueOf(0);
-    for (ScoreHandler scoreHandler : scoreHandlers) {
-      newScore += scoreHandler.pointsToAdd(this);
-    }
-    return withScore(newScore);
-  }
-
   public boolean isAFlatWithMediumDescription() {
-    return this.typology.equals(Typology.FLAT) && hasMediumDescription();
+    return this.typology.equals(Typology.FLAT) && description.isMedium();
   }
 
   public boolean isAFlatWithLongDescription() {
-    return this.typology.equals(Typology.FLAT) && hasLongDescription();
+    return this.typology.equals(Typology.FLAT) && description.isLong();
   }
 
   public boolean isAChaletWithLongDescription() {
-    return this.typology.equals(Typology.CHALET) && hasLongDescription();
-  }
-
-  public boolean hasDescription() {
-    return StringUtils.isNotBlank(this.description);
-  }
-
-  private boolean hasMediumDescription() {
-    if (!hasDescription()) {
-      return false;
-    }
-    int words = new StringTokenizer(this.description).countTokens();
-    return words >= MINIMUN_WORDS_MEDIUM_DESCRIPTION && words <= MAXIMUN_WORDS_MEDIUM_DESCRIPTION;
-  }
-
-  private boolean hasLongDescription() {
-    if (!hasDescription()) {
-      return false;
-    }
-    int words = new StringTokenizer(this.description).countTokens();
-    return words > MAXIMUN_WORDS_MEDIUM_DESCRIPTION;
+    return this.typology.equals(Typology.CHALET) && description.isLong();
   }
 
   public boolean hasPhoto() {
     return !this.pictures.isEmpty();
-  }
-
-  public boolean hasHouseSize() {
-    return !this.houseSize.equals(0);
-  }
-
-  public boolean hasGardenSize() {
-    return !this.gardenSize.equals(0);
   }
 
   public boolean isComplete() {
@@ -209,47 +166,15 @@ public final class Ad {
     boolean isComplete = false;
     switch (this.typology) {
       case FLAT:
-        isComplete = hasDescription() && hasPhoto() && hasHouseSize();
+        isComplete = description.hasDescription() && hasPhoto() && houseSize.hasSize();
         break;
       case CHALET:
-        isComplete = hasDescription() && hasPhoto() && hasHouseSize() && hasGardenSize();
+        isComplete = description.hasDescription() && hasPhoto() && houseSize.hasSize() && gardenSize.hasSize();
         break;
       case GARAGE:
         isComplete = hasPhoto();
     }
     return isComplete;
-  }
-
-  public Integer numberOfOccurrencesWithKeywordsInTheDescription() {
-    if (!hasDescription()) {
-      return 0;
-    }
-    return Math.toIntExact(Arrays.stream(this.description.split(StringUtils.SPACE))
-                                 .filter(descriptionWords ->
-                                             descriptionKeywords.contains(descriptionWords))
-                                 .distinct()
-                                 .count());
-  }
-
-  private class DescriptionKeywords extends ArrayList<String> {
-
-    private final Collator instance = Collator.getInstance();
-
-    public DescriptionKeywords(String[] keywords) {
-      super(Arrays.asList(keywords));
-      instance.setStrength(Collator.PRIMARY);
-    }
-
-    @Override
-    public boolean contains(Object word) {
-      String paramWord = (String) word;
-      for (String keyword : this) {
-        if (instance.compare(keyword, paramWord) == 0) {
-          return true;
-        }
-      }
-      return false;
-    }
   }
 }
 
