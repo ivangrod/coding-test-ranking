@@ -29,7 +29,7 @@ public final class Ad {
   private final Integer score;
   private final Date irrelevantSince;
 
-  public Ad(Integer id, Typology typology, String description,
+  private Ad(Integer id, Typology typology, String description,
       List<Picture> pictureUrls, Integer houseSize, Integer gardenSize) {
     this.id = id;
     this.typology = typology;
@@ -41,7 +41,7 @@ public final class Ad {
     this.irrelevantSince = null;
   }
 
-  public Ad(Integer id, Typology typology, String description,
+  private Ad(Integer id, Typology typology, String description,
       List<Picture> pictureUrls, Integer houseSize, Integer gardenSize, Integer score,
       Date irrelevantSince) {
     this.id = id;
@@ -54,14 +54,22 @@ public final class Ad {
     this.irrelevantSince = irrelevantSince;
   }
 
+  public static Ad createAd(Integer id, Typology typology, String description,
+      List<Picture> pictureUrls, Integer houseSize,
+      Integer gardenSize) {
+    return new Ad(id, typology, description, pictureUrls, houseSize, gardenSize);
+  }
+
+  public static Ad of(Integer id, Typology typology, String description,
+      List<Picture> pictureUrls, Integer houseSize, Integer gardenSize, Integer score,
+      Date irrelevantSince) {
+    return new Ad(id, typology, description, pictureUrls, houseSize, gardenSize, score,
+                  irrelevantSince);
+  }
+
   public Ad withScore(Integer score) {
     return new Ad(this.id, this.typology, this.description, this.pictures, this.houseSize,
                   this.gardenSize, score, this.irrelevantSince);
-  }
-
-  public Ad withDate(Date irrelevantSince) {
-    return new Ad(this.id, this.typology, this.description, this.pictures, this.houseSize,
-                  this.gardenSize, this.score, irrelevantSince);
   }
 
   public Integer getId() {
@@ -97,11 +105,11 @@ public final class Ad {
   }
 
 
-  public boolean isIrrelevant(){
+  public boolean isIrrelevant() {
     return this.score < 40;
   }
 
-  public boolean isNotIrrelevant(){
+  public boolean isNotIrrelevant() {
     return this.score >= 40;
   }
 

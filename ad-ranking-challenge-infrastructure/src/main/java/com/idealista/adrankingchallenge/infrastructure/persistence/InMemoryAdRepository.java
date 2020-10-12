@@ -1,58 +1,53 @@
-package com.idealista.adrankingchallenge.acceptance.config;
+package com.idealista.adrankingchallenge.infrastructure.persistence;
 
 import com.idealista.adrankingchallenge.domain.ad.Ad;
 import com.idealista.adrankingchallenge.domain.ad.AdRepository;
 import com.idealista.adrankingchallenge.domain.ad.search.AdsFound;
-import com.idealista.adrankingchallenge.infrastructure.persistence.AdVO;
-import com.idealista.adrankingchallenge.infrastructure.persistence.PictureVO;
+import com.idealista.adrankingchallenge.infrastructure.persistence.inmemory.InMemoryPersistence;
 import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.AdToAdVOMapper;
 import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.AdVOToAdMapper;
 import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.PictureToPictureVOMapper;
-import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.PictureVOToPictureMapper;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
-public class AdRepositoryStub implements AdRepository {
+@Component
+public class InMemoryAdRepository implements AdRepository {
 
   private final AdVOToAdMapper adVOToAdMapper;
   private final AdToAdVOMapper adToAdVOMapper;
-  private final PictureVOToPictureMapper pictureVOToPictureMapper;
   private final PictureToPictureVOMapper pictureToPictureVOMapper;
-  private Map<Integer, AdVO> adsWithPrimaryKey;
-  private Map<Integer, PictureVO> picturesWithPrimaryKey;
 
-  public AdRepositoryStub(
+  private InMemoryPersistence inMemoryPersistence;
+
+  public InMemoryAdRepository(InMemoryPersistence inMemoryPersistence,
       AdVOToAdMapper adVOToAdMapper, AdToAdVOMapper adToAdVOMapper,
-      PictureVOToPictureMapper pictureVOToPictureMapper,
       PictureToPictureVOMapper pictureToPictureVOMapper) {
 
     this.adVOToAdMapper = adVOToAdMapper;
     this.adToAdVOMapper = adToAdVOMapper;
-    this.pictureVOToPictureMapper = pictureVOToPictureMapper;
     this.pictureToPictureVOMapper = pictureToPictureVOMapper;
 
-    adsWithPrimaryKey = new HashMap<>();
-    picturesWithPrimaryKey = new HashMap<>();
+    this.inMemoryPersistence = inMemoryPersistence;
   }
 
   @Override
   public AdsFound findAllOrderByScore() {
-
     Map<Integer, AdVO> adsWithPrimaryKeyOrdered =
-        adsWithPrimaryKey.entrySet()
-                         .stream()
-                         .sorted(Comparator.nullsLast(
-                             Entry.comparingByValue(Comparator.comparingInt(AdVO::getScore)
-                                                              .reversed())))
-                         .collect(
-                             Collectors.toMap(Entry::getKey, Entry::getValue,
-                                              (ad1, ad2) -> ad1, LinkedHashMap::new));
+        inMemoryPersistence.getAds()
+                           .entrySet()
+                           .stream()
+                           .sorted(Comparator.nullsLast(
+                               Entry.comparingByValue(Comparator.comparingInt(AdVO::getScore)
+                                                                .reversed())))
+                           .collect(
+                               Collectors.toMap(Entry::getKey, Entry::getValue,
+                                                (ad1, ad2) -> ad1, LinkedHashMap::new));
 
     return new AdsFound(
         adsWithPrimaryKeyOrdered.values()
@@ -62,7 +57,8 @@ public class AdRepositoryStub implements AdRepository {
                                       adVO.getPictures()
                                           .stream()
                                           .map(
-                                              pictureKey -> picturesWithPrimaryKey.get(pictureKey))
+                                              pictureKey -> inMemoryPersistence.getPictures()
+                                                                               .get(pictureKey))
                                           .collect(Collectors.toList());
                                   return adVOToAdMapper.convert(adVO, pictures);
                                 })
@@ -71,21 +67,25 @@ public class AdRepositoryStub implements AdRepository {
 
   @Override
   public void save(Ad ad) {
-    picturesWithPrimaryKey.putAll(
-        ad.getPictures()
-          .stream()
-          .map(pictureToPictureVOMapper)
-          .collect(Collectors.toMap(PictureVO::getId, Function.identity(),
-                                    (existing, replacement) -> existing)));
-    adsWithPrimaryKey.put(ad.getId(), adToAdVOMapper.apply(ad));
+    inMemoryPersistence.getPictures()
+                       .putAll(
+                           ad.getPictures()
+                             .stream()
+                             .map(pictureToPictureVOMapper)
+                             .collect(Collectors.toMap(PictureVO::getId, Function.identity(),
+                                                       (existing, replacement) -> existing)));
+    inMemoryPersistence.getAds()
+                       .put(ad.getId(), adToAdVOMapper.apply(ad));
   }
 
   @Override
   public Ad findById(Integer identifier) {
-    AdVO adVOFound = adsWithPrimaryKey.get(identifier);
+    AdVO adVOFound = inMemoryPersistence.getAds()
+                                        .get(identifier);
     List<PictureVO> pictures = adVOFound.getPictures()
                                         .stream()
-                                        .map(pictureKey -> picturesWithPrimaryKey.get(pictureKey))
+                                        .map(pictureKey -> inMemoryPersistence.getPictures()
+                                                                              .get(pictureKey))
                                         .collect(Collectors.toList());
     return adVOToAdMapper.convert(adVOFound, pictures);
   }

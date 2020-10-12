@@ -1,44 +1,23 @@
 package com.idealista.adrankingchallenge.infrastructure.persistence.inmemory;
 
-import com.idealista.adrankingchallenge.domain.ad.Ad;
-import com.idealista.adrankingchallenge.domain.ad.AdRepository;
-import com.idealista.adrankingchallenge.domain.ad.search.AdsFound;
 import com.idealista.adrankingchallenge.infrastructure.persistence.AdVO;
 import com.idealista.adrankingchallenge.infrastructure.persistence.PictureVO;
-import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.AdToAdVOMapper;
-import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.AdVOToAdMapper;
-import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.PictureToPictureVOMapper;
-import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.PictureVOToPictureMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public class InMemoryPersistence implements AdRepository {
+public class InMemoryPersistence {
 
-  private final AdVOToAdMapper adVOToAdMapper;
-  private final AdToAdVOMapper adToAdVOMapper;
-  private final PictureVOToPictureMapper pictureVOToPictureMapper;
-  private final PictureToPictureVOMapper pictureToPictureVOMapper;
   private List<AdVO> ads;
-  private Map<Integer, AdVO> adsWithPrimaryKey;
   private List<PictureVO> pictures;
+
+  private Map<Integer, AdVO> adsWithPrimaryKey;
   private Map<Integer, PictureVO> picturesWithPrimaryKey;
 
-  public InMemoryPersistence(AdVOToAdMapper adVOToAdMapper, AdToAdVOMapper adToAdVOMapper,
-      PictureVOToPictureMapper pictureVOToPictureMapper,
-      PictureToPictureVOMapper pictureToPictureVOMapper) {
-
-    this.adVOToAdMapper = adVOToAdMapper;
-    this.adToAdVOMapper = adToAdVOMapper;
-    this.pictureVOToPictureMapper = pictureVOToPictureMapper;
-    this.pictureToPictureVOMapper = pictureToPictureVOMapper;
-
+  public InMemoryPersistence() {
     ads = new ArrayList<AdVO>();
     ads.add(new AdVO(1, "CHALET", "Este piso es una ganga, compra, compra, COMPRA!!!!!",
                      Collections.<Integer>emptyList(), 300, null, null, null));
@@ -73,34 +52,17 @@ public class InMemoryPersistence implements AdRepository {
     pictures.add(new PictureVO(9, "http://www.idealista.com/pictures/9", "HD"));
     pictures.add(new PictureVO(10, "http://www.idealista.com/pictures/10", "SD"));
 
-    ads.stream()
-       .map(adVO -> adsWithPrimaryKey.put(adVO.getId(), adVO));
-    pictures.stream()
-            .map(pictureVO -> picturesWithPrimaryKey.put(pictureVO.getId(), pictureVO));
+    adsWithPrimaryKey = new HashMap<>();
+    picturesWithPrimaryKey = new HashMap<>();
+    ads.forEach(adVO -> adsWithPrimaryKey.put(adVO.getId(), adVO));
+    pictures.forEach(pictureVO -> picturesWithPrimaryKey.put(pictureVO.getId(), pictureVO));
   }
 
-  @Override
-  public AdsFound findAllOrderByScore() {
-    // TODO Make compare -> sorted(Comparator.nullsLast(Comparator.comparing(AdVO::getScore)))
-    return new AdsFound(
-        ads.stream()
-           .map(adVO -> adVOToAdMapper.convert(adVO, Collections.emptyList()))
-           .collect(Collectors.toList()));
+  public Map<Integer, AdVO> getAds() {
+    return adsWithPrimaryKey;
   }
 
-  @Override
-  public void save(Ad ad) {
-    picturesWithPrimaryKey.putAll(
-        ad.getPictures()
-          .stream()
-          .map(pictureToPictureVOMapper)
-          .collect(Collectors.toMap(PictureVO::getId, Function.identity(),
-                                    (existing, replacement) -> existing)));
-    adsWithPrimaryKey.put(ad.getId(), adToAdVOMapper.apply(ad));
-  }
-
-  @Override
-  public Ad findById(Integer identifier) {
-    return null;
+  public Map<Integer, PictureVO> getPictures() {
+    return picturesWithPrimaryKey;
   }
 }
