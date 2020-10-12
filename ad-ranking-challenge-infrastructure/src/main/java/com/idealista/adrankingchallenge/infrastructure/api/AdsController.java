@@ -1,5 +1,6 @@
 package com.idealista.adrankingchallenge.infrastructure.api;
 
+import com.idealista.adrankingchallenge.application.ad.scoring.AdsScoreCalculator;
 import com.idealista.adrankingchallenge.application.ad.search.AdIrrelevantSearcher;
 import com.idealista.adrankingchallenge.application.ad.search.AdPublicSearcher;
 import com.idealista.adrankingchallenge.application.ad.search.SearchingAdReturn;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdsController {
 
   @Autowired
+  private AdsScoreCalculator adsScoreCalculator;
+
+  @Autowired
   private AdPublicSearcher adPublicSearcher;
 
   @Autowired
@@ -26,9 +30,9 @@ public class AdsController {
     SearchingAdReturn adsQualityResult = adIrrelevantSearcher.execute();
     return ResponseEntity
         .ok(adsQualityResult.getAds()
-                           .stream()
-                           .map(QualityAd::buildQualityAdFromAdFound)
-                           .collect(Collectors.toList()));
+                            .stream()
+                            .map(QualityAd::buildQualityAdFromAdFound)
+                            .collect(Collectors.toList()));
   }
 
   @GetMapping(path = "/ads/public", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,6 +47,8 @@ public class AdsController {
 
   @PatchMapping(path = "/ads/calculateScore")
   public ResponseEntity<Void> calculateScore() {
-    return ResponseEntity.noContent().build();
+    adsScoreCalculator.execute();
+    return ResponseEntity.noContent()
+                         .build();
   }
 }

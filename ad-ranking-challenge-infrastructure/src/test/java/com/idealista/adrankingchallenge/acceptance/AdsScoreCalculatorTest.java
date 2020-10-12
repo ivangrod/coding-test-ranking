@@ -36,7 +36,7 @@ public class AdsScoreCalculatorTest {
   private AdsScoreCalculator adsScoreCalculator;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     inMemoryPersistenceStub.clear();
   }
 
@@ -44,7 +44,8 @@ public class AdsScoreCalculatorTest {
   public void should_Return_Ordered_By_Scoring_Ads_When_Store_Calculator_Is_Invoked() {
 
     // Given
-    Ad adWithoutPictures = Ad.createAd(1, Typology.FLAT, "Beautiful house", Collections.emptyList(), 0,
+    Ad adWithoutPictures = Ad.createAd(1, Typology.FLAT, "Beautiful house", Collections.emptyList(),
+                                       0,
                                        0);
     List<Picture> twoHDPictures = Arrays
         .asList(new Picture(1, "http://www.idealista.com/pictures/1", Definition.HD),

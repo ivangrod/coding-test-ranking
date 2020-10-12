@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,6 +34,7 @@ public class RetrievePublicAdsTest {
   public void should_Retrieve_Public_Ads_Ordered_By_Score() throws Exception {
 
     // Arrange
+    mockMvc.perform(patch("/ads/calculateScore"));
 
     // Act
     final ResultActions response = mockMvc.perform(get("/ads/public"));
@@ -40,8 +42,8 @@ public class RetrievePublicAdsTest {
     // Assert
     response.andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$", hasSize(10)))
+            .andExpect(jsonPath("$", hasSize(5)))
             .andExpect(jsonPath("$.[0]", is(notNullValue())))
-            .andExpect(jsonPath("$.[9]", is(notNullValue())));
+            .andExpect(jsonPath("$.[4]", is(notNullValue())));
   }
 }

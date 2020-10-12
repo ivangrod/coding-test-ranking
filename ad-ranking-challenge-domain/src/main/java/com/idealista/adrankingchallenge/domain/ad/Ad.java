@@ -1,6 +1,7 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
 import java.text.Collator;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -29,8 +30,7 @@ public final class Ad {
   private final Integer score;
   private final Date irrelevantSince;
 
-  private Ad(Integer id, Typology typology, String description,
-      List<Picture> pictureUrls, Integer houseSize, Integer gardenSize) {
+  private Ad(Integer id, Typology typology, String description, List<Picture> pictureUrls, Integer houseSize, Integer gardenSize) {
     this.id = id;
     this.typology = typology;
     this.description = description;
@@ -42,8 +42,7 @@ public final class Ad {
   }
 
   private Ad(Integer id, Typology typology, String description,
-      List<Picture> pictureUrls, Integer houseSize, Integer gardenSize, Integer score,
-      Date irrelevantSince) {
+      List<Picture> pictureUrls, Integer houseSize, Integer gardenSize, Integer score, Date irrelevantSince) {
     this.id = id;
     this.typology = typology;
     this.description = description;
@@ -54,22 +53,21 @@ public final class Ad {
     this.irrelevantSince = irrelevantSince;
   }
 
-  public static Ad createAd(Integer id, Typology typology, String description,
-      List<Picture> pictureUrls, Integer houseSize,
+  public static Ad createAd(Integer id, Typology typology, String description, List<Picture> pictureUrls, Integer houseSize,
       Integer gardenSize) {
     return new Ad(id, typology, description, pictureUrls, houseSize, gardenSize);
   }
 
-  public static Ad of(Integer id, Typology typology, String description,
-      List<Picture> pictureUrls, Integer houseSize, Integer gardenSize, Integer score,
-      Date irrelevantSince) {
-    return new Ad(id, typology, description, pictureUrls, houseSize, gardenSize, score,
-                  irrelevantSince);
+  public Ad withScore(Integer score) {
+    // TODO Responsability of ScoreVO :/
+    Date irrelevantSince = (this.score < 40) ? Date.from(Instant.now()) : null;
+    return new Ad(this.id, this.typology, this.description, this.pictures, this.houseSize,
+                  this.gardenSize, score, irrelevantSince);
   }
 
-  public Ad withScore(Integer score) {
-    return new Ad(this.id, this.typology, this.description, this.pictures, this.houseSize,
-                  this.gardenSize, score, this.irrelevantSince);
+  public static Ad of(Integer id, Typology typology, String description,
+      List<Picture> pictureUrls, Integer houseSize, Integer gardenSize, Integer score, Date irrelevantSince) {
+    return new Ad(id, typology, description, pictureUrls, houseSize, gardenSize, score, irrelevantSince);
   }
 
   public Integer getId() {
@@ -104,12 +102,11 @@ public final class Ad {
     return irrelevantSince;
   }
 
-
-  public boolean isIrrelevant() {
+  public boolean isIrrelevant(){
     return this.score < 40;
   }
 
-  public boolean isNotIrrelevant() {
+  public boolean isNotIrrelevant(){
     return this.score >= 40;
   }
 
@@ -156,7 +153,7 @@ public final class Ad {
   }
 
   public Ad updateScore(List<ScoreHandler> scoreHandlers) {
-    Integer newScore = this.score;
+    Integer newScore = Integer.valueOf(0);
     for (ScoreHandler scoreHandler : scoreHandlers) {
       newScore += scoreHandler.pointsToAdd(this);
     }
@@ -213,8 +210,10 @@ public final class Ad {
     switch (this.typology) {
       case FLAT:
         isComplete = hasDescription() && hasPhoto() && hasHouseSize();
+        break;
       case CHALET:
         isComplete = hasDescription() && hasPhoto() && hasHouseSize() && hasGardenSize();
+        break;
       case GARAGE:
         isComplete = hasPhoto();
     }
@@ -253,3 +252,4 @@ public final class Ad {
     }
   }
 }
+

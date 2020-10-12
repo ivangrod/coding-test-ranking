@@ -2,9 +2,13 @@ package com.idealista.adrankingchallenge.infrastructure.api;
 
 import com.idealista.adrankingchallenge.application.ad.search.AdFound;
 import com.idealista.adrankingchallenge.domain.ad.Picture;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 
 public class QualityAd {
 
@@ -15,7 +19,7 @@ public class QualityAd {
   private Integer houseSize;
   private Integer gardenSize;
   private Integer score;
-  private Date irrelevantSince;
+  private String irrelevantSince;
 
   public QualityAd(Integer id, String typology, String description,
       List<String> pictureUrls, Integer houseSize, Integer gardenSize, Integer score,
@@ -27,71 +31,47 @@ public class QualityAd {
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
     this.score = score;
-    this.irrelevantSince = irrelevantSince;
+    this.irrelevantSince =
+        (irrelevantSince != null) ? dateToString(irrelevantSince) : StringUtils.EMPTY;
   }
 
   public Integer getId() {
     return id;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
   public String getTypology() {
     return typology;
-  }
-
-  public void setTypology(String typology) {
-    this.typology = typology;
   }
 
   public String getDescription() {
     return description;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
   public List<String> getPictureUrls() {
     return pictureUrls;
-  }
-
-  public void setPictureUrls(List<String> pictureUrls) {
-    this.pictureUrls = pictureUrls;
   }
 
   public Integer getHouseSize() {
     return houseSize;
   }
 
-  public void setHouseSize(Integer houseSize) {
-    this.houseSize = houseSize;
-  }
-
   public Integer getGardenSize() {
     return gardenSize;
-  }
-
-  public void setGardenSize(Integer gardenSize) {
-    this.gardenSize = gardenSize;
   }
 
   public Integer getScore() {
     return score;
   }
 
-  public void setScore(Integer score) {
-    this.score = score;
-  }
-
-  public Date getIrrelevantSince() {
+  public String getIrrelevantSince() {
     return irrelevantSince;
   }
 
-  public void setIrrelevantSince(Date irrelevantSince) {
-    this.irrelevantSince = irrelevantSince;
+  private String dateToString(Date irrelevantSince) {
+    ZoneId systemZone = ZoneId.systemDefault();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy - HH:mm:ss");
+    return ZonedDateTime.ofInstant(irrelevantSince.toInstant(), systemZone)
+                        .format(formatter);
   }
 
   public static QualityAd buildQualityAdFromAdFound(AdFound adFound) {
