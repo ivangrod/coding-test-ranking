@@ -96,6 +96,15 @@ public final class Ad {
     return irrelevantSince;
   }
 
+
+  public boolean isIrrelevant(){
+    return this.score < 40;
+  }
+
+  public boolean isNotIrrelevant(){
+    return this.score >= 40;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {

@@ -53,8 +53,7 @@ public class AdsScoreCalculatorTest {
     AdsFound adsFound = adRepositoryStub.findAllOrderByScore();
 
     // Then
-    Assertions.assertThat(adsFound.getAds()
-                                  .get())
+    Assertions.assertThat(adsFound.getAds())
               .isNotEmpty()
               .containsSequence(adWithPicturesScoreUpdate, adWithoutPicturesScoreUpdate);
   }

@@ -1,21 +1,19 @@
 package com.idealista.adrankingchallenge.application.ad.search;
 
 import com.idealista.adrankingchallenge.domain.ad.AdRepository;
-import java.util.Collections;
 import java.util.List;
 
-public class AdSearcher {
+public class AdPublicSearcher {
 
   private final AdRepository adRepository;
 
-  public AdSearcher(AdRepository adRepository) {
+  public AdPublicSearcher(AdRepository adRepository) {
     this.adRepository = adRepository;
   }
 
   public SearchingAdReturn execute() {
     List<AdFound> adsFound = AdFound.fromAds(adRepository.findAllOrderByScore()
-                                                         .getAds()
-                                                         .orElse(Collections.emptyList()));
+                                                         .getAds());
     return new SearchingAdReturn(adsFound);
   }
 }
