@@ -38,31 +38,19 @@ public class InMemoryAdRepository implements AdRepository {
 
   @Override
   public AdsFound findAllOrderByScore() {
+
     Map<Integer, AdVO> adsWithPrimaryKeyOrdered =
         inMemoryPersistence.getAds()
                            .entrySet()
                            .stream()
-                           .sorted(Comparator.nullsLast(
-                               Entry.comparingByValue(Comparator.comparingInt(AdVO::getScore)
-                                                                .reversed())))
-                           .collect(
-                               Collectors.toMap(Entry::getKey, Entry::getValue,
-                                                (ad1, ad2) -> ad1, LinkedHashMap::new));
+                           .sorted(compareByScoreDesc())
+                           .collect(Collectors.toMap(Entry::getKey, Entry::getValue, (ad1, ad2) -> ad1,
+                                                     LinkedHashMap::new));
 
-    return new AdsFound(
-        adsWithPrimaryKeyOrdered.values()
-                                .stream()
-                                .map(adVO -> {
-                                  List<PictureVO> pictures =
-                                      adVO.getPictures()
-                                          .stream()
-                                          .map(
-                                              pictureKey -> inMemoryPersistence.getPictures()
-                                                                               .get(pictureKey))
-                                          .collect(Collectors.toList());
-                                  return adVOToAdMapper.convert(adVO, pictures);
-                                })
-                                .collect(Collectors.toList()));
+    return new AdsFound(adsWithPrimaryKeyOrdered.values()
+                                                .stream()
+                                                .map(adVO -> adVOToAdMapper.convert(adVO, getPicturesVO(adVO)))
+                                                .collect(Collectors.toList()));
   }
 
   @Override
@@ -75,18 +63,23 @@ public class InMemoryAdRepository implements AdRepository {
                              .collect(Collectors.toMap(PictureVO::getId, Function.identity(),
                                                        (existing, replacement) -> existing)));
     inMemoryPersistence.getAds()
-                       .put(ad.getId(), adToAdVOMapper.apply(ad));
+                       .put(ad.getId().value(), adToAdVOMapper.apply(ad));
   }
 
   @Override
   public Ad findById(Integer identifier) {
-    AdVO adVOFound = inMemoryPersistence.getAds()
-                                        .get(identifier);
-    List<PictureVO> pictures = adVOFound.getPictures()
-                                        .stream()
-                                        .map(pictureKey -> inMemoryPersistence.getPictures()
-                                                                              .get(pictureKey))
-                                        .collect(Collectors.toList());
-    return adVOToAdMapper.convert(adVOFound, pictures);
+    AdVO adVOFound = inMemoryPersistence.getAds().get(identifier);
+    return adVOToAdMapper.convert(adVOFound, getPicturesVO(adVOFound));
+  }
+
+  private Comparator<? super Entry<Integer, AdVO>> compareByScoreDesc() {
+    return Comparator.nullsLast(Entry.comparingByValue(Comparator.comparingInt(AdVO::getScore).reversed()));
+  }
+
+  private List<PictureVO> getPicturesVO(AdVO adVO) {
+    return adVO.getPictures()
+               .stream()
+               .map(pictureKey -> inMemoryPersistence.getPictures().get(pictureKey))
+               .collect(Collectors.toList());
   }
 }

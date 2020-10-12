@@ -1,14 +1,15 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
+import static com.idealista.adrankingchallenge.domain.ad.scoring.PictureScore.POINTS_WITHOUT_PICTURE;
+import static com.idealista.adrankingchallenge.domain.ad.scoring.PictureScore.POINTS_WITH_HD_PICTURE;
+import static com.idealista.adrankingchallenge.domain.ad.scoring.PictureScore.POINTS_WITH_SD_PICTURE;
+
+import com.idealista.adrankingchallenge.domain.ad.create.AdMother;
 import com.idealista.adrankingchallenge.domain.ad.scoring.PictureScore;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class PictureScoreShould {
-
-  private static final Integer POINTS_WITHOUT_PICTURE = -10;
-  private static final Integer POINTS_WITH_A_HD_PICTURE = 20;
-  private static final Integer POINTS_WITH_A_SD_PICTURE = 10;
 
   @Test
   public void return_Minus_Ten_Points_Given_An_Ad_Without_Pictures() {
@@ -35,8 +36,7 @@ public class PictureScoreShould {
 
     //Assert
     Assertions.assertThat(twentyPoints)
-              .isEqualTo(POINTS_WITH_A_HD_PICTURE * adWithAnHDPicture.getPictures()
-                                                                     .size());
+              .isEqualTo(POINTS_WITH_HD_PICTURE * adWithAnHDPicture.getPictures().size());
   }
 
   @Test
@@ -50,8 +50,7 @@ public class PictureScoreShould {
 
     //Assert
     Assertions.assertThat(fortyPoints)
-              .isEqualTo(POINTS_WITH_A_HD_PICTURE * adWithTwoHDPictures.getPictures()
-                                                                       .size());
+              .isEqualTo(POINTS_WITH_HD_PICTURE * adWithTwoHDPictures.getPictures().size());
   }
 
   @Test
@@ -65,8 +64,7 @@ public class PictureScoreShould {
 
     //Assert
     Assertions.assertThat(tenPoints)
-              .isEqualTo(POINTS_WITH_A_SD_PICTURE * adWithASDPicture.getPictures()
-                                                                    .size());
+              .isEqualTo(POINTS_WITH_SD_PICTURE * adWithASDPicture.getPictures().size());
   }
 
   @Test
@@ -91,7 +89,7 @@ public class PictureScoreShould {
 
     //Assert
     Assertions.assertThat(thirtyPoints)
-              .isEqualTo(Math.addExact(POINTS_WITH_A_SD_PICTURE * sdPictureCount,
-                                       POINTS_WITH_A_HD_PICTURE * hdPictureCount));
+              .isEqualTo(Math.addExact(POINTS_WITH_SD_PICTURE * sdPictureCount,
+                                       POINTS_WITH_HD_PICTURE * hdPictureCount));
   }
 }

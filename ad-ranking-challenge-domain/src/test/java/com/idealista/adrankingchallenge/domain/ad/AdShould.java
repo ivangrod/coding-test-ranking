@@ -1,5 +1,13 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
+import static com.idealista.adrankingchallenge.domain.ad.AdScore.MAX_SCORE;
+import static com.idealista.adrankingchallenge.domain.ad.AdScore.MIN_SCORE;
+import static com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore.POINTS_FLAT_WITH_LONG_DESCRIPTION;
+import static com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore.POINTS_WITH_DESCRIPTION;
+import static com.idealista.adrankingchallenge.domain.ad.scoring.PictureScore.POINTS_WITH_HD_PICTURE;
+import static com.idealista.adrankingchallenge.domain.ad.scoring.PictureScore.POINTS_WITH_SD_PICTURE;
+
+import com.idealista.adrankingchallenge.domain.ad.create.AdMother;
 import com.idealista.adrankingchallenge.domain.ad.scoring.AdCompleteScore;
 import com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore;
 import com.idealista.adrankingchallenge.domain.ad.scoring.PictureScore;
@@ -9,26 +17,18 @@ import org.junit.jupiter.api.Test;
 
 public class AdShould {
 
-  private static final Integer POINTS_WITHOUT_PICTURE = -10;
-  private static final Integer POINTS_WITH_A_HD_PICTURE = 20;
-  private static final Integer POINTS_WITH_A_SD_PICTURE = 10;
-  private static final Integer POINTS_WITH_DESCRIPTION = 5;
-  private static final Integer POINTS_FLAT_WITH_LONG_DESCRIPTION = 30;
-  private static final Integer MAX_SCORE = 100;
-  private static final Integer MIN_SCORE = 0;
-
   @Test
   public void return_Zero_Value_When_Score_Has_Not_Been_Updated() {
 
     //Arrange
-    Ad ad = AdMother.adEmpty();
+    Ad adEmpty = AdMother.adEmpty();
 
     //Act
 
     //Assert
-    Assertions.assertThat(ad)
+    Assertions.assertThat(adEmpty)
               .isNotNull()
-              .extracting(Ad::getScore)
+              .extracting(ad -> ad.getScore().value())
               .isEqualTo(0);
   }
 
@@ -45,7 +45,7 @@ public class AdShould {
     //Assert
     Assertions.assertThat(adWithoutPicturesWithScoreUpdated)
               .isNotNull()
-              .extracting(Ad::getScore)
+              .extracting(ad -> ad.getScore().value())
               .isEqualTo(MIN_SCORE);
   }
 
@@ -73,11 +73,11 @@ public class AdShould {
     //Assert
     Assertions.assertThat(adWithASDPictureAndAHDPictureWithScoreUpdated)
               .isNotNull()
-              .extracting(Ad::getScore)
+              .extracting(ad -> ad.getScore().value())
               .isEqualTo(Math.addExact(
-                  Math.addExact(adWithASDPictureAndAHDPicture.getScore(),
-                                POINTS_WITH_A_SD_PICTURE * sdPictureCount),
-                  POINTS_WITH_A_HD_PICTURE * hdPictureCount));
+                  Math.addExact(adWithASDPictureAndAHDPicture.getScore().value(),
+                                POINTS_WITH_SD_PICTURE * sdPictureCount),
+                  POINTS_WITH_HD_PICTURE * hdPictureCount));
   }
 
   @Test
@@ -92,9 +92,9 @@ public class AdShould {
     //Assert
     Assertions.assertThat(adFlatWithShortDescriptionWithScoreUpdated)
               .isNotNull()
-              .extracting(Ad::getScore)
+              .extracting(ad -> ad.getScore().value())
               .isEqualTo(
-                  Math.addExact(adFlatWithShortDescription.getScore(), POINTS_WITH_DESCRIPTION));
+                  Math.addExact(adFlatWithShortDescription.getScore().value(), POINTS_WITH_DESCRIPTION));
   }
 
   @Test
@@ -109,9 +109,9 @@ public class AdShould {
     //Assert
     Assertions.assertThat(adFlatHDWithLongDescriptionWithScoreUpdated)
               .isNotNull()
-              .extracting(Ad::getScore)
-              .isEqualTo(Math.addExact(adFlatHDWithLongDescription.getScore(),
-                                       POINTS_WITH_A_HD_PICTURE + POINTS_WITH_DESCRIPTION
+              .extracting(ad -> ad.getScore().value())
+              .isEqualTo(Math.addExact(adFlatHDWithLongDescription.getScore().value(),
+                                       POINTS_WITH_HD_PICTURE + POINTS_WITH_DESCRIPTION
                                            + POINTS_FLAT_WITH_LONG_DESCRIPTION));
   }
 
@@ -128,7 +128,7 @@ public class AdShould {
     //Assert
     Assertions.assertThat(adChaletWithScoreExceed)
               .isNotNull()
-              .extracting(Ad::getScore)
+              .extracting(ad -> ad.getScore().value())
               .isEqualTo(MAX_SCORE);
   }
 
@@ -145,7 +145,7 @@ public class AdShould {
     //Assert
     Assertions.assertThat(adFlatWithLowestScore)
               .isNotNull()
-              .extracting(Ad::getScore)
+              .extracting(ad -> ad.getScore().value())
               .isEqualTo(MIN_SCORE);
   }
 }

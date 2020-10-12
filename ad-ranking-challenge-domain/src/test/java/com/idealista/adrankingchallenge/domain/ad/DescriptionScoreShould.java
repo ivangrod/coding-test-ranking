@@ -1,5 +1,12 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
+import static com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore.POINTS_CHALET_WITH_LONG_DESCRIPTION;
+import static com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore.POINTS_FLAT_WITH_LONG_DESCRIPTION;
+import static com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore.POINTS_FLAT_WITH_MEDIUM_DESCRIPTION;
+import static com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore.POINTS_WITH_DESCRIPTION;
+import static com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore.POINTS_WITH_KEYWORD_DESCRIPTION;
+
+import com.idealista.adrankingchallenge.domain.ad.create.AdMother;
 import com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore;
 import java.util.Arrays;
 import java.util.List;
@@ -7,12 +14,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class DescriptionScoreShould {
-
-  private static final Integer POINTS_WITH_DESCRIPTION = 5;
-  private static final Integer POINTS_FLAT_WITH_MEDIUM_DESCRIPTION = 10;
-  private static final Integer POINTS_FLAT_WITH_LONG_DESCRIPTION = 30;
-  private static final Integer POINTS_CHALET_WITH_LONG_DESCRIPTION = 20;
-  private static final Integer POINTS_WITH_KEYWORD_DESCRIPTION = 5;
 
   @Test
   public void return_Zero_Points_Given_An_Ad_Without_Description() {
@@ -111,8 +112,7 @@ public class DescriptionScoreShould {
     //Assert
     Assertions.assertThat(tenPoints)
               .isEqualTo(
-                  POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
-                      .size()));
+                  POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription.size()));
   }
 
   @Test
@@ -129,8 +129,7 @@ public class DescriptionScoreShould {
     //Assert
     Assertions.assertThat(twentyPoints)
               .isEqualTo(
-                  POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
-                      .size()));
+                  POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription.size()));
   }
 
   @Test
@@ -148,8 +147,7 @@ public class DescriptionScoreShould {
     //Assert
     Assertions.assertThat(thirtyPoints)
               .isEqualTo(
-                  POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription
-                      .size()));
+                  POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION * keywordInDescription.size()));
   }
 
   @Test
@@ -167,7 +165,6 @@ public class DescriptionScoreShould {
     //Assert
     Assertions.assertThat(twentyFivePoints)
               .isEqualTo(POINTS_WITH_DESCRIPTION + (POINTS_WITH_KEYWORD_DESCRIPTION
-                  * misspelledKeywordInDescription
-                  .size()));
+                  * misspelledKeywordInDescription.size()));
   }
 }
