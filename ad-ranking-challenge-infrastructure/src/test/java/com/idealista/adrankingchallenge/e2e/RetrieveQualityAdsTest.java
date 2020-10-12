@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,6 +34,7 @@ public class RetrieveQualityAdsTest {
   public void should_Retrieve_Quality_Ads_Ordered_By_Score() throws Exception {
 
     // Arrange
+    mockMvc.perform(patch("/ads/calculateScore"));
 
     // Act
     final ResultActions response = mockMvc.perform(get("/ads/quality"));

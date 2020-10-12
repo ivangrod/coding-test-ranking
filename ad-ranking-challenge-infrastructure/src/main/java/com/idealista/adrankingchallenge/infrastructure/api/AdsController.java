@@ -1,6 +1,7 @@
 package com.idealista.adrankingchallenge.infrastructure.api;
 
-import com.idealista.adrankingchallenge.application.ad.search.AdSearcher;
+import com.idealista.adrankingchallenge.application.ad.search.AdIrrelevantSearcher;
+import com.idealista.adrankingchallenge.application.ad.search.AdPublicSearcher;
 import com.idealista.adrankingchallenge.application.ad.search.SearchingAdReturn;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,11 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdsController {
 
   @Autowired
-  private AdSearcher adSearcher;
+  private AdPublicSearcher adPublicSearcher;
+
+  @Autowired
+  private AdIrrelevantSearcher adIrrelevantSearcher;
 
   @GetMapping(path = "/ads/quality", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<QualityAd>> qualityListing() {
-    SearchingAdReturn adsQualityResult = adSearcher.execute();
+    SearchingAdReturn adsQualityResult = adIrrelevantSearcher.execute();
     return ResponseEntity
         .ok(adsQualityResult.getAds()
                            .stream()
@@ -29,7 +33,7 @@ public class AdsController {
 
   @GetMapping(path = "/ads/public", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<PublicAd>> publicListing() {
-    SearchingAdReturn adsPublicResult = adSearcher.execute();
+    SearchingAdReturn adsPublicResult = adPublicSearcher.execute();
     return ResponseEntity
         .ok(adsPublicResult.getAds()
                            .stream()

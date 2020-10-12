@@ -7,7 +7,6 @@ import com.idealista.adrankingchallenge.domain.ad.scoring.AdCompleteScore;
 import com.idealista.adrankingchallenge.domain.ad.scoring.DescriptionScore;
 import com.idealista.adrankingchallenge.domain.ad.scoring.PictureScore;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class AdsScoreCalculator {
@@ -24,8 +23,7 @@ public class AdsScoreCalculator {
 
   public void execute() {
     List<Ad> adsToCalculateScore = adRepository.findAllOrderByScore()
-                                               .getAds()
-                                               .orElse(Collections.emptyList());
+                                               .getAds();
     adsToCalculateScore.forEach(ad -> {
       Ad adWithStoreUpdated = ad.updateScore(scoreHandlers);
       adRepository.save(adWithStoreUpdated);
