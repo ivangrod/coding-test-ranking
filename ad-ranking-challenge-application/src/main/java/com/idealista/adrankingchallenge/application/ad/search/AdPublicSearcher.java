@@ -12,8 +12,7 @@ public class AdPublicSearcher {
   }
 
   public SearchingAdReturn execute() {
-    List<AdFound> adsFound = AdFound.fromAds(adRepository.findAllOrderByScore()
-                                                         .getPublicAds());
+    List<AdFound> adsFound = AdFound.fromAds(adRepository.findAllOrderByScore().getPublicAds());
     return new SearchingAdReturn(adsFound);
   }
 }

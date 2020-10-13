@@ -1,13 +1,18 @@
 package com.idealista.adrankingchallenge.infrastructure.persistence.inmemory;
 
+import com.idealista.adrankingchallenge.domain.ad.Ad;
 import com.idealista.adrankingchallenge.infrastructure.persistence.AdVO;
 import com.idealista.adrankingchallenge.infrastructure.persistence.PictureVO;
+import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.AdToAdVOMapper;
+import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.PictureToPictureVOMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class InMemoryPersistence {
 
@@ -17,7 +22,14 @@ public class InMemoryPersistence {
   private Map<Integer, AdVO> adsWithPrimaryKey;
   private Map<Integer, PictureVO> picturesWithPrimaryKey;
 
+  private final AdToAdVOMapper adToAdVOMapper;
+  private final PictureToPictureVOMapper pictureToPictureVOMapper;
+
   public InMemoryPersistence() {
+
+    this.pictureToPictureVOMapper = new PictureToPictureVOMapper();
+    this.adToAdVOMapper = new AdToAdVOMapper();
+
     ads = new ArrayList<AdVO>();
     ads.add(new AdVO(1, "CHALET", "Este piso es una ganga, compra, compra, COMPRA!!!!!",
                      Collections.<Integer>emptyList(), 300, null, null, null));
@@ -59,10 +71,31 @@ public class InMemoryPersistence {
   }
 
   public Map<Integer, AdVO> getAds() {
-    return adsWithPrimaryKey;
+    return Collections.unmodifiableMap(adsWithPrimaryKey);
   }
 
   public Map<Integer, PictureVO> getPictures() {
-    return picturesWithPrimaryKey;
+    return Collections.unmodifiableMap(picturesWithPrimaryKey);
+  }
+
+  public void savePicturesOnCascade(Ad ad) {
+    picturesWithPrimaryKey.putAll(
+        ad.getPictures()
+          .stream()
+          .map(pictureToPictureVOMapper)
+          .collect(Collectors.toMap(PictureVO::getId, Function.identity(),
+                                    (existing, replacement) -> existing)));
+  }
+
+  public void saveAd(Ad ad) {
+    adsWithPrimaryKey.put(ad.getId().value(), adToAdVOMapper.apply(ad));
+  }
+
+  protected void clearAds(){
+    adsWithPrimaryKey.clear();
+  }
+
+  protected void clearPictures(){
+    picturesWithPrimaryKey.clear();
   }
 }
