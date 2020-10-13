@@ -1,6 +1,7 @@
 package com.idealista.adrankingchallenge.domain.ad;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +22,7 @@ public final class Ad {
     this.id = id;
     this.typology = typology;
     this.description = description;
-    this.pictures = pictureUrls;
+    this.pictures = Collections.unmodifiableList(pictureUrls);
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
     this.score = new AdScore(0);
@@ -34,7 +35,7 @@ public final class Ad {
     this.id = id;
     this.typology = typology;
     this.description = description;
-    this.pictures = pictureUrls;
+    this.pictures = Collections.unmodifiableList(pictureUrls);
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
     this.score = score;

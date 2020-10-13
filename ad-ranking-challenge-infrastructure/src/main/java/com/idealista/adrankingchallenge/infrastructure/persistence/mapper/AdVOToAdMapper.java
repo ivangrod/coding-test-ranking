@@ -12,9 +12,7 @@ import com.idealista.adrankingchallenge.infrastructure.persistence.AdVO;
 import com.idealista.adrankingchallenge.infrastructure.persistence.PictureVO;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Component;
 
-@Component
 public class AdVOToAdMapper {
 
   private final PictureVOToPictureMapper pictureVOToPictureMapper;

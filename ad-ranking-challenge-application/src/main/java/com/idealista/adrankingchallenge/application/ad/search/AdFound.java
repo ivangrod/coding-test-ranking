@@ -3,12 +3,13 @@ package com.idealista.adrankingchallenge.application.ad.search;
 import com.idealista.adrankingchallenge.domain.ad.Ad;
 import com.idealista.adrankingchallenge.domain.ad.Picture;
 import com.idealista.adrankingchallenge.domain.ad.Typology;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class AdFound {
+public final class AdFound {
 
   private final Integer id;
   private final Typology typology;
@@ -19,13 +20,13 @@ public class AdFound {
   private final Integer score;
   private final Date irrelevantSince;
 
-  public AdFound(Integer id, Typology typology, String description,
+  private AdFound(Integer id, Typology typology, String description,
       List<Picture> pictures, Integer houseSize, Integer gardenSize, Integer score,
       Date irrelevantSince) {
     this.id = id;
     this.typology = typology;
     this.description = description;
-    this.pictures = pictures;
+    this.pictures = Collections.unmodifiableList(pictures);
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
     this.score = score;

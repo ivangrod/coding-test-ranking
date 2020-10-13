@@ -5,29 +5,30 @@ import com.idealista.adrankingchallenge.domain.ad.Picture;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
-public class QualityAd {
+public final class QualityAd {
 
-  private Integer id;
-  private String typology;
-  private String description;
-  private List<String> pictureUrls;
-  private Integer houseSize;
-  private Integer gardenSize;
-  private Integer score;
-  private String irrelevantSince;
+  private final Integer id;
+  private final String typology;
+  private final String description;
+  private final List<String> pictureUrls;
+  private final Integer houseSize;
+  private final Integer gardenSize;
+  private final Integer score;
+  private final String irrelevantSince;
 
-  public QualityAd(Integer id, String typology, String description,
+  private QualityAd(Integer id, String typology, String description,
       List<String> pictureUrls, Integer houseSize, Integer gardenSize, Integer score,
       Date irrelevantSince) {
     this.id = id;
     this.typology = typology;
     this.description = description;
-    this.pictureUrls = pictureUrls;
+    this.pictureUrls = Collections.unmodifiableList(pictureUrls);
     this.houseSize = houseSize;
     this.gardenSize = gardenSize;
     this.score = score;
@@ -75,13 +76,12 @@ public class QualityAd {
   }
 
   public static QualityAd buildQualityAdFromAdFound(AdFound adFound) {
-    return new QualityAd(adFound.getId(), adFound.getTypology()
-                                                 .name(), adFound.getDescription(),
-                         adFound.getPictures()
-                                .stream()
-                                .map(Picture::getUrl)
-                                .collect(Collectors.toList()),
-                         adFound.getHouseSize(), adFound.getGardenSize(), adFound.getScore(),
+    List<String> pictureUrls = adFound.getPictures()
+                                      .stream()
+                                      .map(Picture::getUrl)
+                                      .collect(Collectors.toList());
+    return new QualityAd(adFound.getId(), adFound.getTypology().name(), adFound.getDescription(),
+                         pictureUrls, adFound.getHouseSize(), adFound.getGardenSize(), adFound.getScore(),
                          adFound.getIrrelevantSince());
   }
 }

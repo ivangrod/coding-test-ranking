@@ -5,7 +5,7 @@ import com.idealista.adrankingchallenge.infrastructure.persistence.inmemory.InMe
 public class InMemoryPersistenceStub extends InMemoryPersistence {
 
   public void clear() {
-    getAds().clear();
-    getPictures().clear();
+    clearAds();
+    clearPictures();
   }
 }

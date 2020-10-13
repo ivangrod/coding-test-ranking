@@ -7,12 +7,12 @@ import com.idealista.adrankingchallenge.infrastructure.persistence.inmemory.InMe
 import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.AdToAdVOMapper;
 import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.AdVOToAdMapper;
 import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.PictureToPictureVOMapper;
+import com.idealista.adrankingchallenge.infrastructure.persistence.mapper.PictureVOToPictureMapper;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
@@ -20,19 +20,12 @@ import org.springframework.stereotype.Component;
 public class InMemoryAdRepository implements AdRepository {
 
   private final AdVOToAdMapper adVOToAdMapper;
-  private final AdToAdVOMapper adToAdVOMapper;
-  private final PictureToPictureVOMapper pictureToPictureVOMapper;
 
   private InMemoryPersistence inMemoryPersistence;
 
-  public InMemoryAdRepository(InMemoryPersistence inMemoryPersistence,
-      AdVOToAdMapper adVOToAdMapper, AdToAdVOMapper adToAdVOMapper,
-      PictureToPictureVOMapper pictureToPictureVOMapper) {
+  public InMemoryAdRepository(InMemoryPersistence inMemoryPersistence) {
 
-    this.adVOToAdMapper = adVOToAdMapper;
-    this.adToAdVOMapper = adToAdVOMapper;
-    this.pictureToPictureVOMapper = pictureToPictureVOMapper;
-
+    this.adVOToAdMapper = new AdVOToAdMapper(new PictureVOToPictureMapper());
     this.inMemoryPersistence = inMemoryPersistence;
   }
 
@@ -55,15 +48,8 @@ public class InMemoryAdRepository implements AdRepository {
 
   @Override
   public void save(Ad ad) {
-    inMemoryPersistence.getPictures()
-                       .putAll(
-                           ad.getPictures()
-                             .stream()
-                             .map(pictureToPictureVOMapper)
-                             .collect(Collectors.toMap(PictureVO::getId, Function.identity(),
-                                                       (existing, replacement) -> existing)));
-    inMemoryPersistence.getAds()
-                       .put(ad.getId().value(), adToAdVOMapper.apply(ad));
+    inMemoryPersistence.savePicturesOnCascade(ad);
+    inMemoryPersistence.saveAd(ad);
   }
 
   @Override
